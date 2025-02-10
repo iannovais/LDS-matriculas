@@ -1,5 +1,5 @@
 # Sururu
-Escreva um ou dois parágrafo resumindo o objetivo do seu projeto.
+A Universidade Sururu demonstrou interesse em automatizar seu processo de matrícula. Seguindo suas necessidades, criaremos um sistema para solucionar seus problemas.
 
 ## Integrantes
 * Ian dos Reis Novais
