@@ -1,4 +1,5 @@
 ```code
+
 @startuml
 left to right direction 
 actor "Secretária da universidade" as secretaria 
@@ -23,7 +24,7 @@ aluno --> (Cancelar matrícula)
 aluno --> (Matricular em disciplina) 
 aluno --> (Confirmar matrícula)
 
-(Confirmar matrícula) --> (Gerar cobrança) 
+(Confirmar matrícula) -.> (Gerar cobrança) : include
 (Gerar cobrança) --> aluno
 
 professor --> (Acessar alunos matriculados na disciplina)
