@@ -1,5 +1,4 @@
 ```code
-
 @startuml
 left to right direction 
 actor "Secretária da universidade" as secretaria 
@@ -34,5 +33,4 @@ usuario <|-- secretaria
 usuario <|-- professor 
 }
 @enduml
-
 ```
