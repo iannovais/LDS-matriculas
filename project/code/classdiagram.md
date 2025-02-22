@@ -1,3 +1,4 @@
+```code
 @startuml
 
 class Usuario {
@@ -88,3 +89,4 @@ Curso "1" *-- "1..*" Disciplina
 Aluno "1" o-- "0..*" Cobranca 
 
 @enduml
+```
