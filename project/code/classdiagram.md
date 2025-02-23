@@ -6,7 +6,6 @@ class Usuario {
     - login : string
     - senha : string
 
-    + cadastrar() : void
     + entrar(senha : String) : boolean
     + sair() : boolean
 }
