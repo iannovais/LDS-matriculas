@@ -3,20 +3,19 @@
 
 class Usuario {
     - id : int
+    - nome: string
     - login : string
     - senha : string
 
-    + entrar(senha : String) : boolean
-    + sair() : boolean
+    + entrar(senha : string) : void
+    + cadastrar(nome : string, login : string, senha : string) : void
+    + sair() : void
 }
 
 class Aluno {
-    - nome : string
+    - MAXOBRIGATORIAS : int = 4
+    - MAXOPTATIVAS : int = 2
     - curso : Curso
-    - disciplinasObrigatorias : List<Disciplina>
-    - disciplinasOptativas : List<Disciplina>
-    - maxObrigatorias : int = 4
-    - maxOptativas : int = 2
 
     + matricularEmDisciplina(disciplina : Disciplina) : void
     + cancelarMatricula(disciplina : Disciplina) : void
@@ -24,14 +23,12 @@ class Aluno {
 }
 
 class Professor {
-    - nome : string
     - disciplinas : List<Disciplina>
 
     + alunosMatriculados(disciplina : Disciplina) : List<Aluno>
 }
 
 class Secretaria {
-    - nome: string
 
     + gerarCurriculo() : void
     + atualizarInformacoesDisciplina() : void
@@ -40,12 +37,13 @@ class Secretaria {
 }
 
 class Disciplina {
+    - MINIMOALUNOS : int = 3
+    - LIMITEALUNOS : int = 60 
     - nome : string
     - creditos : int
+    - custo : float
     - ehObrigatoria : bool
     - alunosMatriculados : List<Aluno>
-    - limiteAlunos : int = 60
-    - minimoAlunos : int = 3
     - status : string
 
     + statusDisciplina() : string
