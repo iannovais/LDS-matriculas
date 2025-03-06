@@ -124,7 +124,6 @@ public class Usuario {
         Scanner scanner = new Scanner(System.in);
 
         do {
-            System.out.println("Bem-vindo ao sistema de usuários!");
             System.out.println("Escolha uma opção:");
             System.out.println("1 - Cadastrar novo usuário");
             System.out.println("2 - Fazer login");
@@ -160,7 +159,7 @@ public class Usuario {
                     String senhaLogin = scanner.nextLine();
 
                     Usuario usuarioCarregado = Usuario.carregar(loginLogin);
-                    
+
                     if (usuarioCarregado != null) {
                         usuarioCarregado.entrar(loginLogin, senhaLogin);
                         if (usuarioCarregado.logado) {
