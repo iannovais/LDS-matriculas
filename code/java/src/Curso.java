@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Curso {
-    private static final String ARQUIVO_CURSO = "code/java/csv/cursos.txt";
+    private static final String ARQUIVOCURSO = "code/java/csv/cursos.txt";
 
     private int idCurso;
     private String nome;
@@ -15,7 +15,7 @@ public class Curso {
     }
 
     public void salvar() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO_CURSO, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVOCURSO, true))) {
             writer.write(idCurso + ";" + nome + ";" + creditos);
             writer.newLine();
         } catch (IOException e) {
@@ -25,7 +25,7 @@ public class Curso {
 
     public static void listarCursos() {
         System.out.println("\n📚 Cursos disponíveis:");
-        try (Scanner scanner = new Scanner(new File(ARQUIVO_CURSO))) {
+        try (Scanner scanner = new Scanner(new File(ARQUIVOCURSO))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");
                 System.out.println("ID: " + dados[0] + " | Nome: " + dados[1] + " | Créditos: " + dados[2]);
@@ -36,7 +36,7 @@ public class Curso {
     }
 
     public static boolean cursoExiste(int idCurso) {
-        try (Scanner scanner = new Scanner(new File(ARQUIVO_CURSO))) {
+        try (Scanner scanner = new Scanner(new File(ARQUIVOCURSO))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");
                 if (Integer.parseInt(dados[0]) == idCurso) {
@@ -51,7 +51,7 @@ public class Curso {
 
     public static int getProximoId() {
         int ultimoId = 0;
-        try (Scanner scanner = new Scanner(new File(ARQUIVO_CURSO))) {
+        try (Scanner scanner = new Scanner(new File(ARQUIVOCURSO))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");
                 ultimoId = Integer.parseInt(dados[0]);

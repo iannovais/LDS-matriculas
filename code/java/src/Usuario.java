@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Usuario {
-    private static final String ARQUIVO_USUARIO = "code/java/csv/usuarios.txt";
+    private static final String ARQUIVOUSUARIO = "code/java/csv/usuarios.txt";
+    private static final int MINIMOALUNOS = 3;
+    private static final int LIMITEALUNOS = 60;
 
     private int id;
     private String nome;
@@ -45,7 +47,7 @@ public class Usuario {
     }
 
     private void salvar() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO_USUARIO, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVOUSUARIO, true))) {
             writer.write(id + ";" + nome + ";" + login + ";" + senha);
             writer.newLine();
         } catch (IOException e) {
@@ -56,7 +58,7 @@ public class Usuario {
     public static int getProximoId() {
         int ultimoId = 0;
 
-        try (Scanner scanner = new Scanner(new File(ARQUIVO_USUARIO))) {
+        try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
             while (scanner.hasNextLine()) {
                 String linha = scanner.nextLine();
                 String[] dados = linha.split(";");
@@ -70,7 +72,7 @@ public class Usuario {
     }
 
     public static Usuario carregar(String login) {
-        try (Scanner scanner = new Scanner(new File(ARQUIVO_USUARIO))) {
+        try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
             while (scanner.hasNextLine()) {
                 String linha = scanner.nextLine();
                 String[] dados = linha.split(";");
@@ -87,7 +89,7 @@ public class Usuario {
     }
 
     public static boolean loginExiste(String login) {
-        try (Scanner scanner = new Scanner(new File(ARQUIVO_USUARIO))) {
+        try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
             while (scanner.hasNextLine()) {
                 String linha = scanner.nextLine();
                 String[] dados = linha.split(";");

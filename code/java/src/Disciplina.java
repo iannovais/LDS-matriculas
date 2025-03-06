@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Disciplina {
-    private static final String ARQUIVO_DISCIPLINA = "code/java/csv/disciplinas.txt";
+    private static final String ARQUIVODISCIPLINA = "code/java/csv/disciplinas.txt";
 
     private int idDisciplina;
     private String nome;
@@ -21,7 +21,7 @@ public class Disciplina {
     }
 
     public void salvar() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO_DISCIPLINA, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVODISCIPLINA, true))) {
             writer.write(idDisciplina + ";" + nome + ";" + creditos + ";" + ehObrigatoria + ";" + status + ";" + idCurso);
             writer.newLine();
         } catch (IOException e) {
@@ -31,7 +31,7 @@ public class Disciplina {
 
     public static int getProximoId() {
         int ultimoId = 0;
-        try (Scanner scanner = new Scanner(new File(ARQUIVO_DISCIPLINA))) {
+        try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");
                 ultimoId = Integer.parseInt(dados[0]);

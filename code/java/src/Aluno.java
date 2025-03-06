@@ -1,12 +1,10 @@
 import java.util.List;
 
 public class Aluno extends Usuario {
-    private String nome;
+    private static final int MAXOBRIGATORIAS = 4;
+    private static final int MAXOPTATIVAS = 2;
+
     private Curso curso;
-    private List<Disciplina> disciplinasObrigatorias;
-    private List<Disciplina> disciplinasOptativas;
-    private int maxObrigatorias = 4;
-    private int maxOptativas = 2;
 
     public void matricularEmDisciplina(Disciplina disciplina) {
     }
