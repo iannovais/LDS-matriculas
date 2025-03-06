@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Curso {
-    private static final String ARQUIVO_CURSO = "code/cursos.txt";
+    private static final String ARQUIVO_CURSO = "code/java/csv/cursos.txt";
 
     private int idCurso;
     private String nome;

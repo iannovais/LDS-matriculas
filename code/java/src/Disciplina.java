@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Disciplina {
-    private static final String ARQUIVO_DISCIPLINA = "code/disciplinas.txt";
+    private static final String ARQUIVO_DISCIPLINA = "code/java/csv/disciplinas.txt";
 
     private int idDisciplina;
     private String nome;

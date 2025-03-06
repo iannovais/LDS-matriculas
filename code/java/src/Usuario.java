@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Usuario {
-    private static final String ARQUIVO_USUARIO = "code/usuarios.txt";
+    private static final String ARQUIVO_USUARIO = "code/java/csv/usuarios.txt";
 
     private int id;
     private String nome;
