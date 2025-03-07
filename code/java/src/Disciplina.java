@@ -92,4 +92,9 @@ public class Disciplina {
 
         scanner.close();
     }
+
+    public String getNome() {
+        return nome;
+    }
 }
+    

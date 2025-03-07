@@ -14,7 +14,7 @@ public class Usuario {
     private String senha;
     private boolean logado;
 
-    private Usuario(String nome, String login, String senha) {
+    protected Usuario(String nome, String login, String senha) {
         this.id = getProximoId();
         this.nome = nome;
         this.login = login;
