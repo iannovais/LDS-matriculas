@@ -3,13 +3,14 @@ import java.util.*;
 
 public class Disciplina {
     private static final String ARQUIVODISCIPLINA = "code/java/csv/disciplinas.txt";
-
+    
     private int idDisciplina;
     private String nome;
     private int creditos;
     private boolean ehObrigatoria;
     private int idCurso;
     private String status;
+    private int numeroMatriculados;
 
     public Disciplina(String nome, int creditos, boolean ehObrigatoria, int idCurso) {
         this.idDisciplina = getProximoId();
@@ -18,11 +19,12 @@ public class Disciplina {
         this.ehObrigatoria = ehObrigatoria;
         this.idCurso = idCurso;
         this.status = "Aberta";
+        this.numeroMatriculados = 0;
     }
 
     public void salvar() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVODISCIPLINA, true))) {
-            writer.write(idDisciplina + ";" + nome + ";" + creditos + ";" + ehObrigatoria + ";" + status + ";" + idCurso);
+            writer.write(idDisciplina + ";" + nome + ";" + creditos + ";" + ehObrigatoria + ";" + status + ";" + idCurso + ";" + numeroMatriculados);
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,7 +44,23 @@ public class Disciplina {
         return ultimoId + 1;
     }
 
-    // teste
+    public boolean matricularAluno() {
+        if (numeroMatriculados < 60) {
+            numeroMatriculados++;
+            return true;
+        } else {
+            System.out.println("Matrículas encerradas para esta disciplina.");
+            return false;
+        }
+    }
+
+    public void verificarStatusDisciplina() {
+        if (numeroMatriculados < 3) {
+            status = "Cancelada";
+        }
+    }
+
+    // Teste
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -56,7 +74,6 @@ public class Disciplina {
         boolean obrigatoria = scanner.nextBoolean();
 
         Curso.listarCursos();
-
         int idCurso;
         do {
             System.out.println("Digite o ID do curso ao qual a disciplina pertence:");
