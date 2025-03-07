@@ -13,12 +13,14 @@ public class Usuario {
     private String login;
     private String senha;
     private boolean logado;
+    private TipoUsuario tipoUsuario;
 
-    protected Usuario(String nome, String login, String senha) {
+    protected Usuario(String nome, String login, String senha, TipoUsuario tipoUsuario) {
         this.id = getProximoId();
         this.nome = nome;
         this.login = login;
         this.senha = senha;
+        this.tipoUsuario = tipoUsuario;
         this.logado = false;
     }
 
@@ -34,19 +36,36 @@ public class Usuario {
         return login;
     }
 
-    public static Usuario cadastrar(String nome, String login, String senha) {
-        if (loginExiste(login)) 
-            throw new IllegalArgumentException("Este login já está em uso. Por favor, escolha outro login.");
-        
-        Usuario novoUsuario = new Usuario(nome, login, senha);
-        novoUsuario.salvar();
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
 
+    public static Usuario cadastrar(String nome, String login, String senha, TipoUsuario tipoUsuario) {
+        if (loginExiste(login))
+            throw new IllegalArgumentException("Este login já está em uso. Por favor, escolha outro login.");
+
+        Usuario novoUsuario;
+        switch (tipoUsuario) {
+            case ALUNO:
+                novoUsuario = new Aluno(nome, login, senha);
+                break;
+            case PROFESSOR:
+                novoUsuario = new Professor(nome, login, senha);
+                break;
+            case SECRETARIA:
+                novoUsuario = new Secretaria(nome, login, senha);
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo de usuário inválido.");
+        }
+
+        novoUsuario.salvar();
         return novoUsuario;
     }
 
     private void salvar() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVOUSUARIO, true))) {
-            writer.write(id + ";" + nome + ";" + login + ";" + senha);
+            writer.write(id + ";" + nome + ";" + login + ";" + senha + ";" + tipoUsuario);
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,7 +85,7 @@ public class Usuario {
             return 1;
         }
 
-        return ultimoId++;
+        return ultimoId + 1;
     }
 
     public static Usuario carregar(String login) {
@@ -76,7 +95,15 @@ public class Usuario {
                 String[] dados = linha.split(";");
 
                 if (dados[2].equals(login)) {
-                    return new Usuario(dados[1], dados[2], dados[3]);
+                    TipoUsuario tipoUsuario = TipoUsuario.valueOf(dados[4]);
+                    switch (tipoUsuario) {
+                        case ALUNO:
+                            return new Aluno(dados[1], dados[2], dados[3]);
+                        case PROFESSOR:
+                            return new Professor(dados[1], dados[2], dados[3]);
+                        case SECRETARIA:
+                            return new Secretaria(dados[1], dados[2], dados[3]);
+                    }
                 }
             }
         } catch (FileNotFoundException e) {
@@ -116,72 +143,5 @@ public class Usuario {
             this.logado = false;
         } else 
             System.out.println("Você precisa estar logado para sair.");
-    }
-
-    // TIRAR ESSE MAIN, APENAS PARA TESTES
-    public static void main(String[] args) {
-        int opcao;
-        Scanner scanner = new Scanner(System.in);
-
-        do {
-            System.out.println("Escolha uma opção:");
-            System.out.println("1 - Cadastrar novo usuário");
-            System.out.println("2 - Fazer login");
-            System.out.println("3 - Sair");
-
-            opcao = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (opcao) {
-                case 1:
-                    System.out.println("Digite o nome:");
-                    String nome = scanner.nextLine();
-
-                    System.out.println("Digite o login:");
-                    String login = scanner.nextLine();
-
-                    System.out.println("Digite a senha:");
-                    String senha = scanner.nextLine();
-
-                    try {
-                        Usuario.cadastrar(nome, login, senha);
-                        System.out.println("Usuário cadastrado com sucesso!");
-                    } catch (IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-
-                case 2:
-                    System.out.println("Digite o login:");
-                    String loginLogin = scanner.nextLine();
-
-                    System.out.println("Digite a senha:");
-                    String senhaLogin = scanner.nextLine();
-
-                    Usuario usuarioCarregado = Usuario.carregar(loginLogin);
-
-                    if (usuarioCarregado != null) {
-                        usuarioCarregado.entrar(loginLogin, senhaLogin);
-                        if (usuarioCarregado.logado) {
-                            System.out.println("Bem-vindo, " + usuarioCarregado.getNome() + "!");
-                            usuarioCarregado.sair();
-                        }
-                    } else {
-                        System.out.println("Usuário não encontrado.");
-                    }
-                    break;
-
-                case 3:
-                    System.out.println("Saindo...");
-                    break;
-
-                default:
-                    System.out.println("Opção inválida.");
-                    break;
-            }
-
-        } while (opcao == 1);
-
-        scanner.close();
     }
 }

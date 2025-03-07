@@ -1,5 +1,7 @@
 public class Secretaria extends Usuario {
-    private String nome;
+    public Secretaria(String nome, String login, String senha) {
+        super(nome, login, senha, TipoUsuario.SECRETARIA);
+    }
 
     public void gerarCurriculo() {
     }
