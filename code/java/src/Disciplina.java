@@ -11,16 +11,18 @@ public class Disciplina {
     private float custo;
     private boolean ehObrigatoria;
     private int idCurso;
+    private int idProfessor;
     private String status;
     private int numeroMatriculados;
     private List<Aluno> alunosMatriculados;
 
-    public Disciplina(String nome, float custo, boolean ehObrigatoria, int idCurso) {
+    public Disciplina(String nome, float custo, boolean ehObrigatoria, int idCurso, int idProfessor) {
         this.idDisciplina = getProximoId();
         this.nome = nome;
         this.custo = custo;
         this.ehObrigatoria = ehObrigatoria;
         this.idCurso = idCurso;
+        this.idProfessor = idProfessor;
         this.status = "Aberta";
         this.numeroMatriculados = 0;
         this.alunosMatriculados = new ArrayList<>();
@@ -29,7 +31,7 @@ public class Disciplina {
     public void salvar() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVODISCIPLINA, true))) {
             writer.write(idDisciplina + ";" + nome + ";" + custo + ";" + ehObrigatoria + ";" + status + ";" + idCurso
-                    + ";" + numeroMatriculados);
+                    + ";" + idProfessor + ";" + numeroMatriculados);
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,36 +93,5 @@ public class Disciplina {
 
     public String getNome() {
         return nome;
-    }
-
-    // Teste
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("\nDigite o nome da disciplina:");
-        String nome = scanner.nextLine();
-
-        System.out.println("Digite o custo da disciplina:");
-        float custo = scanner.nextInt();
-
-        System.out.println("A disciplina é obrigatória? (true/false):");
-        boolean obrigatoria = scanner.nextBoolean();
-
-        Curso.listar();
-        int idCurso;
-        do {
-            System.out.println("Digite o ID do curso ao qual a disciplina pertence:");
-            idCurso = scanner.nextInt();
-            if (!Curso.cursoExiste(idCurso)) {
-                System.out.println("Curso não encontrado! Escolha um ID válido.");
-            }
-        } while (!Curso.cursoExiste(idCurso));
-
-        Disciplina novaDisciplina = new Disciplina(nome, custo, obrigatoria, idCurso);
-        novaDisciplina.salvar();
-
-        System.out.println("Disciplina cadastrada com sucesso!");
-
-        scanner.close();
     }
 }

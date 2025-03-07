@@ -61,22 +61,4 @@ public class Curso {
         }
         return ultimoId + 1;
     }
-
-    // TESTE MAIN
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Digite o nome do curso:");
-        String nome = scanner.nextLine();
-
-        System.out.println("Digite a quantidade de créditos:");
-        int creditos = scanner.nextInt();
-
-        Curso novoCurso = new Curso(nome, creditos);
-        novoCurso.salvar();
-
-        System.out.println("Curso cadastrado com sucesso!");
-
-        scanner.close();
-    }
 }
