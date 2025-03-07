@@ -23,8 +23,8 @@ public class Curso {
         }
     }
 
-    public static void listarCursos() {
-        System.out.println("\n📚 Cursos disponíveis:");
+    public static void listar() {
+        System.out.println("\nCursos disponíveis:");
         try (Scanner scanner = new Scanner(new File(ARQUIVOCURSO))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");

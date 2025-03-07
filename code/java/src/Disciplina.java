@@ -2,23 +2,23 @@ import java.io.*;
 import java.util.*;
 
 public class Disciplina {
-    private static final String ARQUIVODISCIPLINA = "code/java/csv/disciplinas.txt";
+    static final String ARQUIVODISCIPLINA = "code/java/csv/disciplinas.txt";
     private static final int MINIMOALUNOS = 3;
     private static final int LIMITEALUNOS = 60;
 
     private int idDisciplina;
     private String nome;
-    private int creditos;
+    private float custo;
     private boolean ehObrigatoria;
     private int idCurso;
     private String status;
     private int numeroMatriculados;
     private List<Aluno> alunosMatriculados;
 
-    public Disciplina(String nome, int creditos, boolean ehObrigatoria, int idCurso) {
+    public Disciplina(String nome, float custo, boolean ehObrigatoria, int idCurso) {
         this.idDisciplina = getProximoId();
         this.nome = nome;
-        this.creditos = creditos;
+        this.custo = custo;
         this.ehObrigatoria = ehObrigatoria;
         this.idCurso = idCurso;
         this.status = "Aberta";
@@ -28,7 +28,7 @@ public class Disciplina {
 
     public void salvar() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVODISCIPLINA, true))) {
-            writer.write(idDisciplina + ";" + nome + ";" + creditos + ";" + ehObrigatoria + ";" + status + ";" + idCurso
+            writer.write(idDisciplina + ";" + nome + ";" + custo + ";" + ehObrigatoria + ";" + status + ";" + idCurso
                     + ";" + numeroMatriculados);
             writer.newLine();
         } catch (IOException e) {
@@ -47,6 +47,18 @@ public class Disciplina {
             return 1;
         }
         return ultimoId + 1;
+    }
+
+    public static void listar() {
+        System.out.println("\n Disciplinas disponíveis:");
+        try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
+            while (scanner.hasNextLine()) {
+                String[] dados = scanner.nextLine().split(";");
+                System.out.println("ID: " + dados[0] + " | Nome: " + dados[1] + " | Custo: " + dados[2] + " | Obrigatória: " + dados[3] + " | Status: " + dados[4] + " | ID do Curso: " + dados[5]);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Nenhuma disciplina cadastrada.");
+        }
     }
 
     public boolean matricularAluno(Aluno aluno) {
@@ -77,6 +89,10 @@ public class Disciplina {
         return alunosMatriculados;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
     // Teste
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -84,13 +100,13 @@ public class Disciplina {
         System.out.println("\nDigite o nome da disciplina:");
         String nome = scanner.nextLine();
 
-        System.out.println("Digite a quantidade de créditos:");
-        int creditos = scanner.nextInt();
+        System.out.println("Digite o custo da disciplina:");
+        float custo = scanner.nextInt();
 
         System.out.println("A disciplina é obrigatória? (true/false):");
         boolean obrigatoria = scanner.nextBoolean();
 
-        Curso.listarCursos();
+        Curso.listar();
         int idCurso;
         do {
             System.out.println("Digite o ID do curso ao qual a disciplina pertence:");
@@ -100,15 +116,11 @@ public class Disciplina {
             }
         } while (!Curso.cursoExiste(idCurso));
 
-        Disciplina novaDisciplina = new Disciplina(nome, creditos, obrigatoria, idCurso);
+        Disciplina novaDisciplina = new Disciplina(nome, custo, obrigatoria, idCurso);
         novaDisciplina.salvar();
 
         System.out.println("Disciplina cadastrada com sucesso!");
 
         scanner.close();
-    }
-
-    public String getNome() {
-        return nome;
     }
 }

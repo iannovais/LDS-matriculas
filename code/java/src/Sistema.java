@@ -85,7 +85,7 @@ public class Sistema {
                             } else if (usuarioCarregado.getTipoUsuario() == TipoUsuario.PROFESSOR) {
                                 menuProfessor(scanner);
                             } else if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
-                                menuSecretaria(scanner);
+                                menuSecretaria(scanner, usuarioCarregado);
                             }
                         }
                     } catch (IllegalArgumentException e) {
@@ -162,7 +162,7 @@ public class Sistema {
         } while (opcaoProfessor != 2);
     }
 
-    public static void menuSecretaria(Scanner scanner) {
+    public static void menuSecretaria(Scanner scanner, Usuario usuarioCarregado) {
         int opcaoSecretaria;
         do {
             System.out.println("Bem-vindo, Secretaria!");
@@ -180,7 +180,32 @@ public class Sistema {
 
                     break;
                 case 2:
+                Disciplina.listar();
+                
+                System.out.println("Digite o ID da disciplina que deseja atualizar:");
+                int idDisciplina = scanner.nextInt();
+                scanner.nextLine();
 
+                System.out.println("Digite o novo nome da disciplina:");
+                String novoNome = scanner.nextLine();
+
+                System.out.println("Digite o novo custo da disciplina:");
+                float novoCusto = scanner.nextInt();
+                scanner.nextLine();
+
+                System.out.println("A disciplina é obrigatória? (true/false):");
+                boolean novaObrigatoriedade = scanner.nextBoolean();
+                scanner.nextLine();
+
+                System.out.println("Digite o novo status da disciplina (Aberta/Fechada):");
+                String novoStatus = scanner.nextLine();
+
+                if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
+                    Secretaria secretaria = (Secretaria) usuarioCarregado; 
+                    secretaria.atualizarInformacoesDisciplina(idDisciplina, novoNome, novoCusto, novaObrigatoriedade, novoStatus);
+                } else {
+                    System.out.println("Usuário não autorizado para atualizar a disciplina.");
+                }
                     break;
                 case 3:
 
