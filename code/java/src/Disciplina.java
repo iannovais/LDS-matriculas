@@ -3,6 +3,8 @@ import java.util.*;
 
 public class Disciplina {
     private static final String ARQUIVODISCIPLINA = "code/java/csv/disciplinas.txt";
+    private static final int MINIMOALUNOS = 3;
+    private static final int LIMITEALUNOS = 60;
     
     private int idDisciplina;
     private String nome;
@@ -45,7 +47,7 @@ public class Disciplina {
     }
 
     public boolean matricularAluno() {
-        if (numeroMatriculados < 60) {
+        if (numeroMatriculados < LIMITEALUNOS) {
             numeroMatriculados++;
             return true;
         } else {
@@ -55,7 +57,7 @@ public class Disciplina {
     }
 
     public void verificarStatusDisciplina() {
-        if (numeroMatriculados < 3) {
+        if (numeroMatriculados < MINIMOALUNOS) {
             status = "Cancelada";
         }
     }

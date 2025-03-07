@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 public class Usuario {
     private static final String ARQUIVOUSUARIO = "code/java/csv/usuarios.txt";
-    private static final int MINIMOALUNOS = 3;
-    private static final int LIMITEALUNOS = 60;
 
     private int id;
     private String nome;
