@@ -5,7 +5,7 @@ public class Disciplina {
     private static final String ARQUIVODISCIPLINA = "code/java/csv/disciplinas.txt";
     private static final int MINIMOALUNOS = 3;
     private static final int LIMITEALUNOS = 60;
-    
+
     private int idDisciplina;
     private String nome;
     private int creditos;
@@ -13,6 +13,7 @@ public class Disciplina {
     private int idCurso;
     private String status;
     private int numeroMatriculados;
+    private List<Aluno> alunosMatriculados;
 
     public Disciplina(String nome, int creditos, boolean ehObrigatoria, int idCurso) {
         this.idDisciplina = getProximoId();
@@ -22,11 +23,13 @@ public class Disciplina {
         this.idCurso = idCurso;
         this.status = "Aberta";
         this.numeroMatriculados = 0;
+        this.alunosMatriculados = new ArrayList<>();
     }
 
     public void salvar() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVODISCIPLINA, true))) {
-            writer.write(idDisciplina + ";" + nome + ";" + creditos + ";" + ehObrigatoria + ";" + status + ";" + idCurso + ";" + numeroMatriculados);
+            writer.write(idDisciplina + ";" + nome + ";" + creditos + ";" + ehObrigatoria + ";" + status + ";" + idCurso
+                    + ";" + numeroMatriculados);
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,8 +49,9 @@ public class Disciplina {
         return ultimoId + 1;
     }
 
-    public boolean matricularAluno() {
+    public boolean matricularAluno(Aluno aluno) {
         if (numeroMatriculados < LIMITEALUNOS) {
+            alunosMatriculados.add(aluno);
             numeroMatriculados++;
             return true;
         } else {
@@ -56,10 +60,21 @@ public class Disciplina {
         }
     }
 
+    public void cancelarMatricula(Aluno aluno) {
+        if (alunosMatriculados.remove(aluno)) {
+            numeroMatriculados--;
+            System.out.println("Matrícula cancelada para o aluno: " + aluno.getNome());
+        }
+    }
+
     public void verificarStatusDisciplina() {
         if (numeroMatriculados < MINIMOALUNOS) {
             status = "Cancelada";
         }
+    }
+
+    public List<Aluno> getAlunosMatriculados() {
+        return alunosMatriculados;
     }
 
     // Teste
@@ -97,4 +112,3 @@ public class Disciplina {
         return nome;
     }
 }
-    
