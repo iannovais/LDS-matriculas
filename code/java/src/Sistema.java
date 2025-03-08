@@ -382,12 +382,40 @@ public class Sistema {
                     break;
 
                 case 5:
-
-                    break;
-
+                if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
+                    Professor.listar();
+            
+                    System.out.println("Digite o ID do professor que deseja atualizar:");
+                    int idProfessor = scanner.nextInt();
+                    scanner.nextLine(); 
+            
+                    System.out.println("Digite o novo nome do professor:");
+                    String novoNomeProfessor = scanner.nextLine();
+            
+                    Secretaria secretaria = (Secretaria) usuarioCarregado;
+                    secretaria.atualizarInformacoesProfessor(idProfessor, novoNomeProfessor);
+                } else {
+                    System.out.println("Usuário não autorizado para atualizar informações de professor.");
+                }
+                break;
+            
                 case 6:
-
-                    break;
+                if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
+                    Aluno.listar();
+            
+                    System.out.println("Digite o ID do aluno que deseja atualizar:");
+                    int idAluno = scanner.nextInt();
+                    scanner.nextLine(); 
+            
+                    System.out.println("Digite o novo nome do aluno:");
+                    String novoNomeAluno = scanner.nextLine();
+            
+                    Secretaria secretaria = (Secretaria) usuarioCarregado;
+                    secretaria.atualizarInformacoesAluno(idAluno, novoNomeAluno);
+                } else {
+                    System.out.println("Usuário não autorizado para atualizar informações de aluno.");
+                }
+                break;
 
                 case 7:
                     limparTela();

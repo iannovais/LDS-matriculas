@@ -98,4 +98,18 @@ public class Aluno extends Usuario {
         }
         return null;
     }
+
+    public static void listar() {
+        System.out.println("\nAlunos disponíveis:");
+        try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
+            while (scanner.hasNextLine()) {
+                String[] dados = scanner.nextLine().split(";");
+                if (dados[4].equals("ALUNO")) {
+                    System.out.println("ID: " + dados[0] + " | Nome: " + dados[1]);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Nenhum professor cadastrado.");
+        }
+    }
 }
