@@ -1,3 +1,5 @@
 1;Ian;Ian;123;ALUNO
 2;Saulo;Saulo;123;ALUNO
 3;Jolonga;Jolonga;123;ALUNO
+4;secretaria;secretaria;123;SECRETARIA
+5;professor;professor;123;PROFESSOR

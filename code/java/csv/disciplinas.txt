@@ -1,0 +1,8 @@
+1;obg1;100.0;true;Cancelada;1;5;1
+2;obg2;100.0;true;Cancelada;1;5;1
+3;obg3;100.0;true;Cancelada;1;5;1
+4;obg4;100.0;true;Cancelada;1;5;1
+5;obg5;100.0;true;Aberta;1;5;0
+6;opt1;100.0;false;Cancelada;1;5;1
+7;opt2;100.0;false;Cancelada;1;5;1
+8;opt3;100.0;false;Aberta;1;5;0

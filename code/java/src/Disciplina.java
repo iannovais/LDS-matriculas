@@ -14,7 +14,6 @@ public class Disciplina {
     private int idProfessor;
     private String status;
     private int numeroMatriculados;
-    private List<Aluno> alunosMatriculados;
 
     public Disciplina(String nome, float custo, boolean ehObrigatoria, int idCurso, int idProfessor) {
         this.idDisciplina = getProximoId();
@@ -25,7 +24,6 @@ public class Disciplina {
         this.idProfessor = idProfessor;
         this.status = "Aberta";
         this.numeroMatriculados = 0;
-        this.alunosMatriculados = new ArrayList<>();
     }
 
     public void salvar() {
@@ -52,7 +50,7 @@ public class Disciplina {
     }
 
     public static void listar() {
-        System.out.println("\n Disciplinas disponíveis:");
+        System.out.println("\nDisciplinas disponíveis:");
         try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");
@@ -65,8 +63,9 @@ public class Disciplina {
 
     public boolean matricularAluno(Aluno aluno) {
         if (numeroMatriculados < LIMITEALUNOS) {
-            alunosMatriculados.add(aluno);
             numeroMatriculados++;
+            verificarStatusDisciplina();
+            atualizarArquivoDisciplina();
             return true;
         } else {
             System.out.println("Matrículas encerradas para esta disciplina.");
@@ -75,23 +74,114 @@ public class Disciplina {
     }
 
     public void cancelarMatricula(Aluno aluno) {
-        if (alunosMatriculados.remove(aluno)) {
-            numeroMatriculados--;
-            System.out.println("Matrícula cancelada para o aluno: " + aluno.getNome());
-        }
+        numeroMatriculados--;
+        verificarStatusDisciplina();
+        atualizarArquivoDisciplina();
     }
 
     public void verificarStatusDisciplina() {
         if (numeroMatriculados < MINIMOALUNOS) {
             status = "Cancelada";
+        } else {
+            status = "Aberta";
         }
-    }
-
-    public List<Aluno> getAlunosMatriculados() {
-        return alunosMatriculados;
     }
 
     public String getNome() {
         return nome;
+    }
+
+    public int getIdDisciplina() {
+        return idDisciplina;
+    }
+
+    public int getIdProfessor() {
+        return idProfessor;
+    }
+
+    public boolean isEhObrigatoria() {
+        return ehObrigatoria;
+    }
+
+    public void setIdDisciplina(int idDisciplina) {
+        this.idDisciplina = idDisciplina;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setNumeroMatriculados(int numeroMatriculados) {
+        this.numeroMatriculados = numeroMatriculados;
+    }
+
+    public static Disciplina carregarPorId(int idDisciplina) {
+        try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
+            while (scanner.hasNextLine()) {
+                String[] dados = scanner.nextLine().split(";");
+                int id = Integer.parseInt(dados[0]);
+                if (id == idDisciplina) {
+                    String nome = dados[1];
+                    float custo = Float.parseFloat(dados[2]);
+                    boolean ehObrigatoria = Boolean.parseBoolean(dados[3]);
+                    String status = dados[4];
+                    int idCurso = Integer.parseInt(dados[5]);
+                    int idProfessor = Integer.parseInt(dados[6]);
+                    int numeroMatriculados = Integer.parseInt(dados[7]);
+
+                    Disciplina disciplina = new Disciplina(nome, custo, ehObrigatoria, idCurso, idProfessor);
+                    disciplina.setIdDisciplina(id);
+                    disciplina.setStatus(status);
+                    disciplina.setNumeroMatriculados(numeroMatriculados);
+                    return disciplina;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo de disciplinas não encontrado.");
+        } catch (NumberFormatException e) {
+            System.out.println("Erro ao ler os dados da disciplina.");
+        }
+        return null;
+    }
+
+    private void atualizarArquivoDisciplina() {
+        List<String> linhas = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
+            while (scanner.hasNextLine()) {
+                String linha = scanner.nextLine();
+                String[] dados = linha.split(";");
+                if (Integer.parseInt(dados[0]) == this.idDisciplina) {
+                    linha = idDisciplina + ";" + nome + ";" + custo + ";" + ehObrigatoria + ";" + status + ";" + idCurso
+                            + ";" + idProfessor + ";" + numeroMatriculados;
+                }
+                linhas.add(linha);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVODISCIPLINA))) {
+            for (String linha : linhas) {
+                writer.write(linha);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void listarDisciplinasDoProfessor(int idProfessor) {
+        System.out.println("\nDisciplinas do professor:");
+        try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
+            while (scanner.hasNextLine()) {
+                String[] dados = scanner.nextLine().split(";");
+                int idProfessorDisciplina = Integer.parseInt(dados[6]);
+                if (idProfessorDisciplina == idProfessor) {
+                    System.out.println("ID: " + dados[0] + " | Nome: " + dados[1]);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Nenhuma disciplina cadastrada.");
+        }
     }
 }

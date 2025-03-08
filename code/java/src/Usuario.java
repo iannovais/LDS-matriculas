@@ -12,7 +12,6 @@ public class Usuario {
     private String nome;
     private String login;
     private String senha;
-    private boolean logado;
     private TipoUsuario tipoUsuario;
 
     protected Usuario(String nome, String login, String senha, TipoUsuario tipoUsuario) {
@@ -21,7 +20,6 @@ public class Usuario {
         this.login = login;
         this.senha = senha;
         this.tipoUsuario = tipoUsuario;
-        this.logado = false;
     }
 
     public int getId() {
@@ -38,6 +36,10 @@ public class Usuario {
 
     public TipoUsuario getTipoUsuario() {
         return tipoUsuario;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public static Usuario cadastrar(String nome, String login, String senha, TipoUsuario tipoUsuario) {
@@ -93,24 +95,35 @@ public class Usuario {
             while (scanner.hasNextLine()) {
                 String linha = scanner.nextLine();
                 String[] dados = linha.split(";");
-
-                if (dados[2].equals(login)) {
+    
+                if (dados[2].equals(login)) { 
+                    int id = Integer.parseInt(dados[0]);
+                    String nome = dados[1];
+                    String senha = dados[3];
                     TipoUsuario tipoUsuario = TipoUsuario.valueOf(dados[4]);
+    
                     switch (tipoUsuario) {
                         case ALUNO:
-                            return new Aluno(dados[1], dados[2], dados[3]);
+                            return new Aluno(nome, login, senha) {{
+                                setId(id); 
+                            }};
                         case PROFESSOR:
-                            return new Professor(dados[1], dados[2], dados[3]);
+                            return new Professor(nome, login, senha) {{
+                                setId(id); 
+                            }};
                         case SECRETARIA:
-                            return new Secretaria(dados[1], dados[2], dados[3]);
+                            return new Secretaria(nome, login, senha) {{
+                                setId(id);
+                            }};
+                        default:
+                            throw new IllegalArgumentException("Tipo de usuário inválido.");
                     }
                 }
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Arquivo de usuários não encontrado.");
         }
-
-        return null;
+        return null; 
     }
 
     public static boolean loginExiste(String login) {
@@ -131,17 +144,7 @@ public class Usuario {
     }
 
     public void entrar(String login, String senha) {
-        if (this.login.equals(login) && this.senha.equals(senha)) {
-            this.logado = true;
-        } else {
-            System.out.println("Login ou senha incorretos.");
-        }
-    }
-
-    public void sair() {
-        if (this.logado) {
-            this.logado = false;
-        } else 
-            System.out.println("Você precisa estar logado para sair.");
+        if (!(this.login.equals(login) && this.senha.equals(senha)))
+            throw new IllegalArgumentException("Login ou senha incorretos."); 
     }
 }

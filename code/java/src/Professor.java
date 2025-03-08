@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,13 +11,12 @@ public class Professor extends Usuario {
         super(nome, login, senha, TipoUsuario.PROFESSOR);
     }
 
-    public List<Aluno> alunosMatriculados(Disciplina disciplina) {
-        if (disciplinas.contains(disciplina)) {
-            return disciplina.getAlunosMatriculados();
-        } else {
-            System.out.println("O professor não leciona esta disciplina.");
-            return null;
+    public List<Aluno> getAlunosMatriculadosNaDisciplina(int idDisciplina) {
+        Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
+        if (disciplina != null && disciplina.getIdProfessor() == this.getId()) {
+            return Matricula.getAlunosMatriculadosNaDisciplina(idDisciplina);
         }
+        return new ArrayList<>(); 
     }
 
     public static void listar() {
@@ -45,10 +45,5 @@ public class Professor extends Usuario {
             return false;
         }
         return false;
-    }
-    
-
-    public void adicionarDisciplina(Disciplina disciplina) {
-        disciplinas.add(disciplina);
     }
 }
