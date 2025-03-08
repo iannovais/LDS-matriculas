@@ -12,7 +12,7 @@ public class Disciplina {
     private boolean ehObrigatoria;
     private int idCurso;
     private int idProfessor;
-    private String status;
+    private StatusDisciplina status; // Usando o enum StatusDisciplina
     private int numeroMatriculados;
 
     public Disciplina(String nome, float custo, boolean ehObrigatoria, int idCurso, int idProfessor) {
@@ -22,10 +22,11 @@ public class Disciplina {
         this.ehObrigatoria = ehObrigatoria;
         this.idCurso = idCurso;
         this.idProfessor = idProfessor;
-        this.status = "Aberta";
+        this.status = StatusDisciplina.CRIADA; // Status inicial é "CRIADA"
         this.numeroMatriculados = 0;
     }
 
+    // Getters e Setters
     public String getNome() {
         return nome;
     }
@@ -46,7 +47,11 @@ public class Disciplina {
         this.idDisciplina = idDisciplina;
     }
 
-    public void setStatus(String status) {
+    public StatusDisciplina getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(StatusDisciplina status) {
         this.status = status;
     }
 
@@ -93,7 +98,6 @@ public class Disciplina {
     public boolean matricularAluno(Aluno aluno) {
         if (numeroMatriculados < LIMITEALUNOS) {
             numeroMatriculados++;
-            verificarStatusDisciplina();
             atualizarArquivoDisciplina();
             return true;
         } else {
@@ -104,16 +108,7 @@ public class Disciplina {
 
     public void cancelarMatricula(Aluno aluno) {
         numeroMatriculados--;
-        verificarStatusDisciplina();
         atualizarArquivoDisciplina();
-    }
-
-    public void verificarStatusDisciplina() {
-        if (numeroMatriculados < MINIMOALUNOS) {
-            status = "Cancelada";
-        } else {
-            status = "Aberta";
-        }
     }
 
     public static Disciplina carregarPorId(int idDisciplina) {
@@ -125,7 +120,7 @@ public class Disciplina {
                     String nome = dados[1];
                     float custo = Float.parseFloat(dados[2]);
                     boolean ehObrigatoria = Boolean.parseBoolean(dados[3]);
-                    String status = dados[4];
+                    StatusDisciplina status = StatusDisciplina.valueOf(dados[4]);
                     int idCurso = Integer.parseInt(dados[5]);
                     int idProfessor = Integer.parseInt(dados[6]);
                     int numeroMatriculados = Integer.parseInt(dados[7]);
@@ -145,14 +140,44 @@ public class Disciplina {
         return null;
     }
 
+    public static List<Disciplina> carregarTodasDisciplinas() {
+        List<Disciplina> disciplinas = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
+            while (scanner.hasNextLine()) {
+                String[] dados = scanner.nextLine().split(";");
+                int id = Integer.parseInt(dados[0]);
+                String nome = dados[1];
+                float custo = Float.parseFloat(dados[2]);
+                boolean ehObrigatoria = Boolean.parseBoolean(dados[3]);
+                StatusDisciplina status = StatusDisciplina.valueOf(dados[4]);
+                int idCurso = Integer.parseInt(dados[5]);
+                int idProfessor = Integer.parseInt(dados[6]);
+                int numeroMatriculados = Integer.parseInt(dados[7]);
+
+                Disciplina disciplina = new Disciplina(nome, custo, ehObrigatoria, idCurso, idProfessor);
+                disciplina.setIdDisciplina(id);
+                disciplina.setStatus(status);
+                disciplina.setNumeroMatriculados(numeroMatriculados);
+                disciplinas.add(disciplina);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo de disciplinas não encontrado.");
+        } catch (NumberFormatException e) {
+            System.out.println("Erro ao ler os dados da disciplina.");
+        }
+        return disciplinas;
+    }
+
+    
+
     public void atualizarInformacoes(String novoNome, float novoCusto, boolean novaObrigatoriedade) {
         this.nome = novoNome;
         this.custo = novoCusto;
         this.ehObrigatoria = novaObrigatoriedade;
-        this.atualizarArquivoDisciplina(); 
+        this.atualizarArquivoDisciplina();
     }
 
-    private void atualizarArquivoDisciplina() {
+    public void atualizarArquivoDisciplina() {
         List<String> linhas = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
             while (scanner.hasNextLine()) {

@@ -22,16 +22,25 @@ public class Aluno extends Usuario {
     }
 
     public void matricularEmDisciplina(Disciplina disciplina) {
+        // Verifica se a disciplina está ativa
+        if (disciplina.getStatus() != StatusDisciplina.ATIVA) {
+            System.out.print("\033[H\033[2J"); // Limpar tela
+            System.out.println("\n\u001B[31mOPS! Esta disciplina não está disponível para matrícula.\u001B[0m\n");
+            return;
+        }
+    
+        // Verifica se o aluno já está matriculado na disciplina
         if (Matricula.alunoJaMatriculado(this.getId(), disciplina.getIdDisciplina())) {
-            System.out.print("\033[H\033[2J"); //limpar tela
+            System.out.print("\033[H\033[2J"); // Limpar tela
             System.out.println("\n\u001B[31mOPS! Você já está matriculado nesta disciplina.\u001B[0m\n");
             return;
         }
-
+    
+        // Verifica os limites de matrículas obrigatórias e optativas
         List<Integer> disciplinasIds = Matricula.carregarDisciplinasDoAluno(this.getId());
         int countObrigatorias = 0;
         int countOptativas = 0;
-
+    
         for (int idDisciplina : disciplinasIds) {
             Disciplina disc = Disciplina.carregarPorId(idDisciplina);
             if (disc != null) {
@@ -42,9 +51,9 @@ public class Aluno extends Usuario {
                 }
             }
         }
-
-        System.out.print("\033[H\033[2J"); //limpar tela
-
+    
+        System.out.print("\033[H\033[2J"); // Limpar tela
+    
         if (disciplina.isEhObrigatoria()) {
             if (countObrigatorias >= MAXOBRIGATORIAS) {
                 System.out.println("\n\u001B[31mOPS! Limite de matrículas em disciplinas obrigatórias atingido.\u001B[0m\n");
@@ -56,11 +65,12 @@ public class Aluno extends Usuario {
                 return;
             }
         }
-
+    
+        // Realiza a matrícula
         if (disciplina.matricularAluno(this)) {
             Matricula matricula = new Matricula(this.getId(), disciplina.getIdDisciplina(), true);
             matricula.salvar();
-            System.out.print("\033[H\033[2J"); //limpar tela
+            System.out.print("\033[H\033[2J"); // Limpar tela
             System.out.println("\u001B[32mMatrícula realizada com sucesso!\u001B[0m\n");
         }
     }

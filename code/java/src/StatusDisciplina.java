@@ -1,3 +1,3 @@
 public enum StatusDisciplina {
-    ATIVA, CANCELADA, ENCERRADA
+    ATIVA, CANCELADA, ENCERRADA, CRIADA
 }

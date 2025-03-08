@@ -24,4 +24,23 @@ public class Secretaria extends Usuario {
     public void atualizarInformacoesAluno(int idAluno, String novoNome) {
         Usuario.atualizar(idAluno, novoNome, TipoUsuario.ALUNO);
     }
+
+    public void abrirPeriodoMatriculas() {
+        List<Disciplina> disciplinas = Disciplina.carregarTodasDisciplinas();
+        boolean periodoAberto = false;
+
+        for (Disciplina disciplina : disciplinas) {
+            if (disciplina.getStatus() == StatusDisciplina.CRIADA) {
+                disciplina.setStatus(StatusDisciplina.ATIVA);
+                disciplina.atualizarArquivoDisciplina();
+                periodoAberto = true; // Indica que pelo menos uma disciplina foi atualizada
+            }
+        }
+
+        if (periodoAberto) {
+            System.out.println("\u001B[32mPeríodo de matrículas aberto com sucesso!\u001B[0m\n");
+        } else {
+            System.out.println("\u001B[31mNenhuma disciplina com status 'CRIADA' encontrada.\u001B[0m\n");
+        }
+    }
 }
