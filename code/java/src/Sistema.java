@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 
 public class Sistema {
@@ -306,12 +305,13 @@ public class Sistema {
 
                     System.out.println("Digite o custo da disciplina:");
                     float custoDisciplina = scanner.nextFloat();
+                    scanner.nextLine(); 
 
-                    System.out.println("A disciplina é obrigatória? (true/false):");
-                    boolean obrigatoriaDisciplina = scanner.nextBoolean();
-                    scanner.nextLine();
+                    System.out.println("A disciplina é obrigatória? (sim/não):");
+                    String respostaObrigatoria = scanner.nextLine().toLowerCase();
+                    boolean obrigatoriaDisciplina = respostaObrigatoria.equals("sim");
 
-                    Curso.listar();
+                    Curso.listar();                                     
                     int idCursoDisciplina;
                     do {
                         System.out.println("Digite o ID do curso ao qual a disciplina pertence:");
