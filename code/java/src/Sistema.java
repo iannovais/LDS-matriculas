@@ -305,13 +305,13 @@ public class Sistema {
 
                     System.out.println("Digite o custo da disciplina:");
                     float custoDisciplina = scanner.nextFloat();
-                    scanner.nextLine(); 
+                    scanner.nextLine();
 
                     System.out.println("A disciplina é obrigatória? (sim/não):");
                     String respostaObrigatoria = scanner.nextLine().toLowerCase();
                     boolean obrigatoriaDisciplina = respostaObrigatoria.equals("sim");
 
-                    Curso.listar();                                     
+                    Curso.listar();
                     int idCursoDisciplina;
                     do {
                         System.out.println("Digite o ID do curso ao qual a disciplina pertence:");
@@ -359,9 +359,9 @@ public class Sistema {
                     float novoCusto = scanner.nextInt();
                     scanner.nextLine();
 
-                    System.out.println("A disciplina é obrigatória? (true/false):");
-                    boolean novaObrigatoriedade = scanner.nextBoolean();
-                    scanner.nextLine();
+                    System.out.println("A disciplina é obrigatória? (sim/não):");
+                    String resposta = scanner.nextLine().toLowerCase();
+                    boolean novaObrigatoriedade = resposta.equals("sim");
 
                     System.out.println("Digite o novo status da disciplina (Aberta/Fechada):");
                     String novoStatus = scanner.nextLine();
