@@ -313,7 +313,7 @@ public class Sistema {
                     case 3:
                     if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
                         Secretaria secretaria = (Secretaria) usuarioCarregado;
-                        secretaria.abrirPeriodoMatriculas(); // Chamada direta, sem retorno
+                        secretaria.abrirPeriodoMatriculas(); 
                     } else {
                         System.out.println(ANSI_RED + "Apenas a secretaria pode abrir o período de matrículas." + ANSI_RESET);
                     }
