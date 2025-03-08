@@ -38,12 +38,12 @@ public class Secretaria extends Usuario {
                     writer.write(linha);
                     writer.newLine();
                 }
-                System.out.println("Disciplina atualizada com sucesso!");
+                System.out.println("\n\u001B[32mDisciplina atualizada com sucesso!\u001B[0m\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Disciplina não encontrada!");
+            System.out.println("\n\u001B[32mDisciplina não encontrada!\u001B[0m\n");
         }
     }
 

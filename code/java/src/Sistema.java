@@ -154,6 +154,7 @@ public class Sistema {
             System.out.println("2 - Matricular em disciplina");
             System.out.println("3 - Cancelar matrícula");
             System.out.println("4 - Sair");
+            System.out.print("> ");
             opcaoAluno = scanner.nextInt();
             scanner.nextLine();
 
@@ -187,7 +188,8 @@ public class Sistema {
 
     private static void matricularEmDisciplina(Scanner scanner, Aluno aluno) {
         Disciplina.listar();
-        System.out.println("Digite o ID da disciplina para se matricular:");
+        System.out.println("\nDigite o ID da disciplina para se matricular:");
+        System.out.print("> ");
         int idDisciplina = scanner.nextInt();
         scanner.nextLine();
 
@@ -195,16 +197,17 @@ public class Sistema {
         if (disciplina != null) {
             aluno.matricularEmDisciplina(disciplina);
         } else {
-            System.out.println("Disciplina não encontrada.");
+            limparTela();
+            System.out.println(ANSI_RED + "\nDisciplina não encontrada.\n" + ANSI_RESET);
         }
     }
 
     private static void cancelarMatricula(Scanner scanner, Aluno aluno) {
         List<Integer> disciplinasMatriculadas = Matricula.carregarDisciplinasDoAluno(aluno.getId());
         if (disciplinasMatriculadas.isEmpty()) {
-            System.out.println("Você não está matriculado em nenhuma disciplina.");
+            System.out.println("\nVocê não está matriculado em nenhuma disciplina.");
         } else {
-            System.out.println("Disciplinas matriculadas:");
+            System.out.println("\nDisciplinas matriculadas:");
             for (int id : disciplinasMatriculadas) {
                 Disciplina disc = Disciplina.carregarPorId(id);
                 if (disc != null) {
@@ -212,7 +215,8 @@ public class Sistema {
                 }
             }
 
-            System.out.println("Digite o ID da disciplina para cancelar a matrícula:");
+            System.out.println("\nDigite o ID da disciplina para cancelar a matrícula:");
+            System.out.print("> ");
             int idDisciplinaCancelar = scanner.nextInt();
             scanner.nextLine();
 
@@ -220,7 +224,8 @@ public class Sistema {
             if (disciplinaCancelar != null) {
                 aluno.cancelarMatricula(disciplinaCancelar);
             } else {
-                System.out.println("Disciplina não encontrada.");
+                limparTela();
+                System.out.println(ANSI_RED + "\nDisciplina não encontrada.\n" + ANSI_RESET);
             }
         }
     }

@@ -11,18 +11,20 @@ public class Aluno extends Usuario {
 
     public void visualizarMatriculas() {
         List<Integer> disciplinasIds = Matricula.carregarDisciplinasDoAluno(this.getId());
-        System.out.println("Você está matruculado nas seguintes matérias: ");
+        System.out.println("\nVocê está matrículado nas seguintes matérias: ");
         for (int idDisciplina : disciplinasIds) {
             Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
             if (disciplina != null) {
                 System.out.println("- " + disciplina.getNome());
             }
         }
+        System.out.println();
     }
 
     public void matricularEmDisciplina(Disciplina disciplina) {
         if (Matricula.alunoJaMatriculado(this.getId(), disciplina.getIdDisciplina())) {
-            System.out.println("\u001B[31mOPS! Você já está matriculado nesta disciplina.\u001B[0m");
+            System.out.print("\u001B[H\u001B[2J"); //limpar tela
+            System.out.println("\n\u001B[31mOPS! Você já está matriculado nesta disciplina.\u001B[0m\n");
             return;
         }
 
@@ -41,10 +43,11 @@ public class Aluno extends Usuario {
             }
         }
 
+        System.out.print("\u001B[H\u001B[2J"); //limpar tela
+
         if (disciplina.isEhObrigatoria()) {
             if (countObrigatorias >= MAXOBRIGATORIAS) {
-                System.out
-                        .println("\u001B[31mOPS! Limite de matrículas em disciplinas obrigatórias atingido.\u001B[0m");
+                System.out.println("\n\u001B[31mOPS! Limite de matrículas em disciplinas obrigatórias atingido.\u001B[0m\n");
                 return;
             }
         } else {
@@ -57,7 +60,8 @@ public class Aluno extends Usuario {
         if (disciplina.matricularAluno(this)) {
             Matricula matricula = new Matricula(this.getId(), disciplina.getIdDisciplina(), true);
             matricula.salvar();
-            System.out.println("Matrícula realizada com sucesso!");
+            System.out.print("\u001B[H\u001B[2J"); //limpar tela
+            System.out.println("\u001B[32mMatrícula realizada com sucesso!\u001B[0m\n");
         }
     }
 
@@ -69,7 +73,8 @@ public class Aluno extends Usuario {
                 matricula.setAtiva(false);
                 Matricula.atualizar(matriculas);
                 disciplina.cancelarMatricula(this);
-                System.out.println("Matrícula cancelada com sucesso!");
+                System.out.print("\u001B[H\u001B[2J"); //limpar tela
+                System.out.println("\u001B[32mMatrícula cancelada com sucesso!\u001B[0m\n");
                 return;
             }
         }
