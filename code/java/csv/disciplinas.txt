@@ -1,2 +1,3 @@
-1;Fundamentos;50.0;true;ATIVA;1;5;0
-2;AED;100.0;true;ATIVA;1;5;0
+1;Fundamentos;50.0;true;ENCERRADA;1;5;60
+2;AED;100.0;true;CANCELADA;1;5;0
+3;AED 2;100.0;true;ENCERRADA;1;5;3

@@ -29,26 +29,46 @@ public class Matricula {
     public void setAtiva(boolean ativa) {
         this.ativa = ativa;
     }
-    
-        public static void abrirPeriodoMatriculas() {
-            List<Disciplina> disciplinas = Disciplina.carregarTodasDisciplinas();
-            boolean periodoAberto = false;
-    
-            for (Disciplina disciplina : disciplinas) {
-                if (disciplina.getStatus() == StatusDisciplina.CRIADA) {
-                    disciplina.setStatus(StatusDisciplina.ATIVA);
-                    disciplina.atualizarArquivoDisciplina();
-                    periodoAberto = true; // Indica que pelo menos uma disciplina foi atualizada
-                }
-            }
-    
-            if (periodoAberto) {
-                System.out.println("\u001B[32mPeríodo de matrículas aberto com sucesso!\u001B[0m\n");
-            } else {
-                System.out.println("\u001B[31mNenhuma disciplina com status 'CRIADA' encontrada.\u001B[0m\n");
+
+    public static void abrirPeriodoMatriculas() {
+        List<Disciplina> disciplinas = Disciplina.carregarTodasDisciplinas();
+        boolean periodoAberto = false;
+
+        for (Disciplina disciplina : disciplinas) {
+            if (disciplina.getStatus() == StatusDisciplina.CRIADA) {
+                disciplina.setStatus(StatusDisciplina.ATIVA);
+                disciplina.atualizarArquivoDisciplina();
+                periodoAberto = true;
             }
         }
-    
+
+        if (periodoAberto) {
+            System.out.print("\033[H\033[2J");
+            System.out.println("\u001B[32mPeríodo de matrículas aberto com sucesso!\u001B[0m\n");
+        }
+    }
+
+    public static void fecharPeriodoMatriculas() {
+        List<Disciplina> disciplinas = Disciplina.carregarTodasDisciplinas();
+        boolean periodoFechado = false;
+
+        for (Disciplina disciplina : disciplinas) {
+            if (disciplina.getStatus() == StatusDisciplina.ATIVA) {
+                if (disciplina.getNumeroMatriculados() >= Disciplina.MINIMOALUNOS) {
+                    disciplina.setStatus(StatusDisciplina.ENCERRADA);
+                } else {
+                    disciplina.setStatus(StatusDisciplina.CANCELADA);
+                }
+                disciplina.atualizarArquivoDisciplina();
+                periodoFechado = true;
+            }
+        }
+
+        if (periodoFechado) {
+            System.out.print("\033[H\033[2J");
+            System.out.println("\u001B[32mPeríodo de matrículas fechado com sucesso!\u001B[0m\n");
+        }
+    }
 
     public void salvar() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVOMATRICULAS, true))) {

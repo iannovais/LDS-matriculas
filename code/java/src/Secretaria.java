@@ -25,4 +25,8 @@ public class Secretaria extends Usuario {
     public void abrirPeriodoMatriculas() {
         Matricula.abrirPeriodoMatriculas(); 
     }
+
+    public void fecharPeriodoMatriculas() {
+        Matricula.fecharPeriodoMatriculas(); 
+    }
 }

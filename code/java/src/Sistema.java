@@ -293,10 +293,11 @@ public class Sistema {
             System.out.println("1 - Cadastrar Curso");
             System.out.println("2 - Cadastrar Disciplina");
             System.out.println("3 - Abrir período de matrículas");
-            System.out.println("4 - Atualizar informações de disciplina");
-            System.out.println("5 - Atualizar informações de professor");
-            System.out.println("6 - Atualizar informações de aluno");
-            System.out.println("7 - Sair");
+            System.out.println("4 - Fechar período de matrículas");
+            System.out.println("5 - Atualizar informações de disciplina");
+            System.out.println("6 - Atualizar informações de professor");
+            System.out.println("7 - Atualizar informações de aluno");
+            System.out.println("8 - Sair");
             System.out.print("> ");
             opcaoSecretaria = scanner.nextInt();
             scanner.nextLine();
@@ -310,7 +311,7 @@ public class Sistema {
                     cadastrarDisciplina(scanner);
                     break;
 
-                    case 3:
+                case 3:
                     if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
                         Secretaria secretaria = (Secretaria) usuarioCarregado;
                         secretaria.abrirPeriodoMatriculas(); 
@@ -320,25 +321,34 @@ public class Sistema {
                     break;
 
                 case 4:
-                    atualizarInformacoesDisciplina(scanner, usuarioCarregado);
+                    if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
+                        Secretaria secretaria = (Secretaria) usuarioCarregado;
+                        secretaria.fecharPeriodoMatriculas();
+                    } else {
+                        System.out.println(ANSI_RED + "Apenas a secretaria pode fechar o período de matrículas." + ANSI_RESET);
+                    }
                     break;
 
                 case 5:
-                    atualizarInformacoesProfessor(scanner, usuarioCarregado);
+                    atualizarInformacoesDisciplina(scanner, usuarioCarregado);
                     break;
 
                 case 6:
-                    atualizarInformacoesAluno(scanner, usuarioCarregado);
+                    atualizarInformacoesProfessor(scanner, usuarioCarregado);
                     break;
 
                 case 7:
+                    atualizarInformacoesAluno(scanner, usuarioCarregado);
+                    break;
+
+                case 8:
                     limparTela();
                     break;
 
                 default:
                     System.out.println(ANSI_RED + "Opção inválida." + ANSI_RESET);
             }
-        } while (opcaoSecretaria != 7); // Loop até o usuário escolher sair (opção 7)
+        } while (opcaoSecretaria != 8); 
     }
     
     public static void cadastrarCurso(Scanner scanner) {

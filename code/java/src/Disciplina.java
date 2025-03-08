@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Disciplina {
     static final String ARQUIVODISCIPLINA = "code/java/csv/disciplinas.txt";
-    private static final int MINIMOALUNOS = 3;
-    private static final int LIMITEALUNOS = 60;
+    protected static final int MINIMOALUNOS = 3;
+    protected static final int LIMITEALUNOS = 60;
 
     private int idDisciplina;
     private String nome;
@@ -12,7 +12,7 @@ public class Disciplina {
     private boolean ehObrigatoria;
     private int idCurso;
     private int idProfessor;
-    private StatusDisciplina status; // Usando o enum StatusDisciplina
+    private StatusDisciplina status;
     private int numeroMatriculados;
 
     public Disciplina(String nome, float custo, boolean ehObrigatoria, int idCurso, int idProfessor) {
@@ -22,11 +22,10 @@ public class Disciplina {
         this.ehObrigatoria = ehObrigatoria;
         this.idCurso = idCurso;
         this.idProfessor = idProfessor;
-        this.status = StatusDisciplina.CRIADA; // Status inicial é "CRIADA"
+        this.status = StatusDisciplina.CRIADA; 
         this.numeroMatriculados = 0;
     }
 
-    // Getters e Setters
     public String getNome() {
         return nome;
     }
@@ -37,6 +36,10 @@ public class Disciplina {
 
     public int getIdProfessor() {
         return idProfessor;
+    }
+
+    public int getNumeroMatriculados() {
+        return numeroMatriculados;
     }
 
     public boolean isEhObrigatoria() {
@@ -98,6 +101,7 @@ public class Disciplina {
     public boolean matricularAluno(Aluno aluno) {
         if (numeroMatriculados < LIMITEALUNOS) {
             numeroMatriculados++;
+            verificarQuantidadeAlunosDisciplina();
             atualizarArquivoDisciplina();
             return true;
         } else {
@@ -109,6 +113,12 @@ public class Disciplina {
     public void cancelarMatricula(Aluno aluno) {
         numeroMatriculados--;
         atualizarArquivoDisciplina();
+    }
+
+    public void verificarQuantidadeAlunosDisciplina() {
+        if (numeroMatriculados >= LIMITEALUNOS) {
+            status = StatusDisciplina.ENCERRADA;
+        }
     }
 
     public static Disciplina carregarPorId(int idDisciplina) {
@@ -167,8 +177,6 @@ public class Disciplina {
         }
         return disciplinas;
     }
-
-    
 
     public void atualizarInformacoes(String novoNome, float novoCusto, boolean novaObrigatoriedade) {
         this.nome = novoNome;
