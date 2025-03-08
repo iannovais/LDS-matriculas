@@ -149,4 +149,38 @@ public class Usuario {
 
         return false;
     }
+
+    public static void atualizar(int idUsuario, String novoNome, TipoUsuario tipoUsuario) {
+        List<String> linhas = new ArrayList<>();
+        boolean encontrado = false;
+
+        try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
+            while (scanner.hasNextLine()) {
+                String linha = scanner.nextLine();
+                String[] dados = linha.split(";");
+                if (Integer.parseInt(dados[0]) == idUsuario && dados[4].equals(tipoUsuario.toString())) {
+                    encontrado = true;
+                    dados[1] = novoNome;
+                    linha = String.join(";", dados);
+                }
+                linhas.add(linha);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (encontrado) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVOUSUARIO))) {
+                for (String linha : linhas) {
+                    writer.write(linha);
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("\n\u001B[32mInformações atualizadas com sucesso!\u001B[0m\n");
+        } else {
+            System.out.println("\n\u001B[32m" + tipoUsuario.toString().toLowerCase() + " não encontrado!\u001B[0m\n");
+        }
+    }
 }

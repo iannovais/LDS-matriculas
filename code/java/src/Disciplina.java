@@ -145,6 +145,13 @@ public class Disciplina {
         return null;
     }
 
+    public void atualizarInformacoes(String novoNome, float novoCusto, boolean novaObrigatoriedade) {
+        this.nome = novoNome;
+        this.custo = novoCusto;
+        this.ehObrigatoria = novaObrigatoriedade;
+        this.atualizarArquivoDisciplina(); 
+    }
+
     private void atualizarArquivoDisciplina() {
         List<String> linhas = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {

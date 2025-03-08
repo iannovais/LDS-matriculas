@@ -425,16 +425,11 @@ public class Sistema {
             String resposta = scanner.nextLine().toLowerCase();
             boolean novaObrigatoriedade = resposta.equals("sim");
     
-            System.out.println("\nDigite o novo status da disciplina (Aberta/Fechada):");
-            System.out.print("> ");
-            String novoStatus = scanner.nextLine();
-    
             limparTela();
     
             if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
                 Secretaria secretaria = (Secretaria) usuarioCarregado;
-                secretaria.atualizarInformacoesDisciplina(idDisciplina, novoNome, novoCusto,
-                        novaObrigatoriedade, novoStatus);
+                secretaria.atualizarInformacoesDisciplina(idDisciplina, novoNome, novoCusto, novaObrigatoriedade);
             } else {
                 System.out.println(ANSI_RED + "\nUsuário não autorizado para atualizar a disciplina.\n" + ANSI_RESET);
             }
