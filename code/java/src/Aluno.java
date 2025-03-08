@@ -1,7 +1,5 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Aluno extends Usuario {
     private static final int MAXOBRIGATORIAS = 4;
@@ -45,7 +43,8 @@ public class Aluno extends Usuario {
 
         if (disciplina.isEhObrigatoria()) {
             if (countObrigatorias >= MAXOBRIGATORIAS) {
-                System.out.println("\u001B[31mOPS! Limite de matrículas em disciplinas obrigatórias atingido.\u001B[0m");
+                System.out
+                        .println("\u001B[31mOPS! Limite de matrículas em disciplinas obrigatórias atingido.\u001B[0m");
                 return;
             }
         } else {
@@ -65,10 +64,11 @@ public class Aluno extends Usuario {
     public void cancelarMatricula(Disciplina disciplina) {
         List<Matricula> matriculas = Matricula.carregar();
         for (Matricula matricula : matriculas) {
-            if (matricula.getIdAluno() == this.getId() && matricula.getIdDisciplina() == disciplina.getIdDisciplina() && matricula.isAtiva()) {
+            if (matricula.getIdAluno() == this.getId() && matricula.getIdDisciplina() == disciplina.getIdDisciplina()
+                    && matricula.isAtiva()) {
                 matricula.setAtiva(false);
                 Matricula.atualizar(matriculas);
-                disciplina.cancelarMatricula(this); 
+                disciplina.cancelarMatricula(this);
                 System.out.println("Matrícula cancelada com sucesso!");
                 return;
             }
@@ -77,20 +77,20 @@ public class Aluno extends Usuario {
     }
 
     public static Aluno carregarPorId(int idAluno) {
-    try (Scanner scanner = new Scanner(new File("code/java/csv/usuarios.txt"))) {
-        while (scanner.hasNextLine()) {
-            String[] dados = scanner.nextLine().split(";");
-            int id = Integer.parseInt(dados[0]);
-            if (id == idAluno && dados[4].equals("ALUNO")) {
-                String nome = dados[1];
-                String login = dados[2];
-                String senha = dados[3];
-                return new Aluno(nome, login, senha);
+        try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
+            while (scanner.hasNextLine()) {
+                String[] dados = scanner.nextLine().split(";");
+                int id = Integer.parseInt(dados[0]);
+                if (id == idAluno && dados[4].equals("ALUNO")) {
+                    String nome = dados[1];
+                    String login = dados[2];
+                    String senha = dados[3];
+                    return new Aluno(nome, login, senha);
+                }
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo de usuários não encontrado.");
         }
-    } catch (FileNotFoundException e) {
-        System.out.println("Arquivo de usuários não encontrado.");
+        return null;
     }
-    return null;
-}
 }

@@ -26,6 +26,34 @@ public class Disciplina {
         this.numeroMatriculados = 0;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public int getIdDisciplina() {
+        return idDisciplina;
+    }
+
+    public int getIdProfessor() {
+        return idProfessor;
+    }
+
+    public boolean isEhObrigatoria() {
+        return ehObrigatoria;
+    }
+
+    public void setIdDisciplina(int idDisciplina) {
+        this.idDisciplina = idDisciplina;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setNumeroMatriculados(int numeroMatriculados) {
+        this.numeroMatriculados = numeroMatriculados;
+    }
+
     public void salvar() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVODISCIPLINA, true))) {
             writer.write(idDisciplina + ";" + nome + ";" + custo + ";" + ehObrigatoria + ";" + status + ";" + idCurso
@@ -54,7 +82,8 @@ public class Disciplina {
         try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");
-                System.out.println("ID: " + dados[0] + " | Nome: " + dados[1] + " | Custo: " + dados[2] + " | Obrigatória: " + dados[3] + " | Status: " + dados[4] + " | ID do Curso: " + dados[5]);
+                System.out.println("ID: " + dados[0] + " | Nome: " + dados[1] + " | Custo: " + dados[2]
+                        + " | Obrigatória: " + dados[3] + " | Status: " + dados[4] + " | ID do Curso: " + dados[5]);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Nenhuma disciplina cadastrada.");
@@ -85,34 +114,6 @@ public class Disciplina {
         } else {
             status = "Aberta";
         }
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public int getIdDisciplina() {
-        return idDisciplina;
-    }
-
-    public int getIdProfessor() {
-        return idProfessor;
-    }
-
-    public boolean isEhObrigatoria() {
-        return ehObrigatoria;
-    }
-
-    public void setIdDisciplina(int idDisciplina) {
-        this.idDisciplina = idDisciplina;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setNumeroMatriculados(int numeroMatriculados) {
-        this.numeroMatriculados = numeroMatriculados;
     }
 
     public static Disciplina carregarPorId(int idDisciplina) {

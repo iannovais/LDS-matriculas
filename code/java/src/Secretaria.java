@@ -1,10 +1,5 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class Secretaria extends Usuario {
     public Secretaria(String nome, String login, String senha) {
@@ -14,7 +9,8 @@ public class Secretaria extends Usuario {
     public void gerarCurriculo() {
     }
 
-    public void atualizarInformacoesDisciplina(int idDisciplina, String novoNome, float novoCusto, boolean novaObrigatoriedade, String novoStatus) {
+    public void atualizarInformacoesDisciplina(int idDisciplina, String novoNome, float novoCusto,
+            boolean novaObrigatoriedade, String novoStatus) {
         List<String> linhas = new ArrayList<>();
         boolean encontrado = false;
 

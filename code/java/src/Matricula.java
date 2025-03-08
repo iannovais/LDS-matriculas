@@ -1,7 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Matricula {
     private static final String ARQUIVOMATRICULAS = "code/java/csv/matriculas.txt";
@@ -81,7 +79,8 @@ public class Matricula {
 
     public static boolean alunoJaMatriculado(int idAluno, int idDisciplina) {
         for (Matricula matricula : carregar()) {
-            if (matricula.getIdAluno() == idAluno && matricula.getIdDisciplina() == idDisciplina && matricula.isAtiva()) {
+            if (matricula.getIdAluno() == idAluno && matricula.getIdDisciplina() == idDisciplina
+                    && matricula.isAtiva()) {
                 return true;
             }
         }
@@ -95,7 +94,7 @@ public class Matricula {
                 String[] dados = scanner.nextLine().split(";");
                 int idDisciplinaMatricula = Integer.parseInt(dados[1]);
                 boolean matriculaAtiva = Boolean.parseBoolean(dados[2]);
-    
+
                 if (idDisciplinaMatricula == idDisciplina && matriculaAtiva) {
                     int idAluno = Integer.parseInt(dados[0]);
                     Aluno aluno = Aluno.carregarPorId(idAluno);

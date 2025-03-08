@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.Scanner;
+import java.util.*;
 
 public class Curso {
     private static final String ARQUIVOCURSO = "code/java/csv/cursos.txt";
@@ -35,7 +35,7 @@ public class Curso {
         }
     }
 
-    public static boolean cursoExiste(int idCurso) {
+    public static boolean existe(int idCurso) {
         try (Scanner scanner = new Scanner(new File(ARQUIVOCURSO))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");

@@ -1,12 +1,8 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Usuario {
-    private static final String ARQUIVOUSUARIO = "code/java/csv/usuarios.txt";
+    protected static final String ARQUIVOUSUARIO = "code/java/csv/usuarios.txt";
 
     private int id;
     private String nome;
@@ -40,6 +36,11 @@ public class Usuario {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void entrar(String login, String senha) {
+        if (!(this.login.equals(login) && this.senha.equals(senha)))
+            throw new IllegalArgumentException("Login ou senha incorretos.");
     }
 
     public static Usuario cadastrar(String nome, String login, String senha, TipoUsuario tipoUsuario) {
@@ -95,26 +96,32 @@ public class Usuario {
             while (scanner.hasNextLine()) {
                 String linha = scanner.nextLine();
                 String[] dados = linha.split(";");
-    
-                if (dados[2].equals(login)) { 
+
+                if (dados[2].equals(login)) {
                     int id = Integer.parseInt(dados[0]);
                     String nome = dados[1];
                     String senha = dados[3];
                     TipoUsuario tipoUsuario = TipoUsuario.valueOf(dados[4]);
-    
+
                     switch (tipoUsuario) {
                         case ALUNO:
-                            return new Aluno(nome, login, senha) {{
-                                setId(id); 
-                            }};
+                            return new Aluno(nome, login, senha) {
+                                {
+                                    setId(id);
+                                }
+                            };
                         case PROFESSOR:
-                            return new Professor(nome, login, senha) {{
-                                setId(id); 
-                            }};
+                            return new Professor(nome, login, senha) {
+                                {
+                                    setId(id);
+                                }
+                            };
                         case SECRETARIA:
-                            return new Secretaria(nome, login, senha) {{
-                                setId(id);
-                            }};
+                            return new Secretaria(nome, login, senha) {
+                                {
+                                    setId(id);
+                                }
+                            };
                         default:
                             throw new IllegalArgumentException("Tipo de usuário inválido.");
                     }
@@ -123,7 +130,7 @@ public class Usuario {
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo de usuários não encontrado.");
         }
-        return null; 
+        return null;
     }
 
     public static boolean loginExiste(String login) {
@@ -141,10 +148,5 @@ public class Usuario {
         }
 
         return false;
-    }
-
-    public void entrar(String login, String senha) {
-        if (!(this.login.equals(login) && this.senha.equals(senha)))
-            throw new IllegalArgumentException("Login ou senha incorretos."); 
     }
 }

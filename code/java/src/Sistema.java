@@ -1,5 +1,5 @@
-import java.util.List;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Sistema {
     private static final String ANSI_RED = "\u001B[31m";
@@ -15,6 +15,7 @@ public class Sistema {
             System.out.println("1 - Cadastrar novo usuário");
             System.out.println("2 - Fazer login");
             System.out.println("3 - Sair do sistema");
+            System.out.print("> ");
             opcao = scanner.nextInt();
             scanner.nextLine();
 
@@ -41,29 +42,34 @@ public class Sistema {
     }
 
     private static void cadastrarUsuario(Scanner scanner) {
-        System.out.println("Digite o nome:");
+        System.out.println("\nDigite o nome:");
+        System.out.print("> ");
         String nome = scanner.nextLine();
 
         String login;
         do {
-            System.out.println("Digite o login:");
+            System.out.println("\nDigite o login:");
+            System.out.print("> ");
             login = scanner.nextLine();
             if (Usuario.loginExiste(login)) {
-                System.out.println(ANSI_RED + "Este login já está em uso. Por favor, escolha outro login." + ANSI_RESET);
+                System.out.println(
+                        ANSI_RED + "\nEste login já está em uso. Por favor, escolha outro login." + ANSI_RESET);
             }
         } while (Usuario.loginExiste(login));
 
-        System.out.println("Digite a senha:");
+        System.out.println("\nDigite a senha:");
+        System.out.print("> ");
         String senha = scanner.nextLine();
 
         int tipo;
         TipoUsuario tipoUsuario = null;
 
         do {
-            System.out.println("Selecione o tipo de usuário:");
+            System.out.println("\nSelecione o tipo de usuário:");
             System.out.println("1 - Aluno");
             System.out.println("2 - Professor");
             System.out.println("3 - Secretaria");
+            System.out.print("> ");
             tipo = scanner.nextInt();
             scanner.nextLine();
 
@@ -87,17 +93,20 @@ public class Sistema {
 
         try {
             Usuario.cadastrar(nome, login, senha, tipoUsuario);
-            System.out.println(ANSI_GREEN + "Usuário cadastrado com sucesso!" + ANSI_RESET);
+            limparTela();
+            System.out.println(ANSI_GREEN + "Usuário cadastrado com sucesso!\n" + ANSI_RESET);
         } catch (IllegalArgumentException e) {
             System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
         }
     }
 
     private static void loginUsuario(Scanner scanner) {
-        System.out.println("Digite o login:");
+        System.out.println("\nDigite o login:");
+        System.out.print("> ");
         String loginLogin = scanner.nextLine();
 
-        System.out.println("Digite a senha:");
+        System.out.println("\nDigite a senha:");
+        System.out.print("> ");
         String senhaLogin = scanner.nextLine();
 
         Usuario usuarioCarregado = Usuario.carregar(loginLogin);
@@ -105,9 +114,11 @@ public class Sistema {
         if (usuarioCarregado != null) {
             try {
                 usuarioCarregado.entrar(loginLogin, senhaLogin);
+                limparTela();
 
                 if (usuarioCarregado.getTipoUsuario() != null && usuarioCarregado.getLogin().equals(loginLogin)) {
-                    System.out.println(ANSI_GREEN + "Login bem-sucedido!" + ANSI_RESET);
+                    System.out.println(ANSI_GREEN + "\nLogin bem-sucedido!" + ANSI_RESET);
+                    System.out.println();
 
                     switch (usuarioCarregado.getTipoUsuario()) {
                         case ALUNO:
@@ -124,16 +135,19 @@ public class Sistema {
                     }
                 }
             } catch (IllegalArgumentException e) {
-                System.out.println(ANSI_RED + "Login ou senha incorretos. Tente novamente." + ANSI_RESET);
+                limparTela();
+                System.out.println(ANSI_RED + "\nOPS! Login ou senha incorretos. Tente novamente." + ANSI_RESET);
+                System.out.println();
             }
         } else {
-            System.out.println(ANSI_RED + "Usuário não encontrado." + ANSI_RESET);
+            limparTela();
+            System.out.println(ANSI_RED + "\nOPS! Usuário não encontrado.\n" + ANSI_RESET);
         }
     }
 
     public static void menuAluno(Scanner scanner, Aluno aluno) {
         int opcaoAluno;
-    
+
         do {
             System.out.println("Bem-vindo, Aluno!");
             System.out.println("Escolha uma opção:");
@@ -142,50 +156,50 @@ public class Sistema {
             System.out.println("3 - Cancelar matrícula");
             System.out.println("4 - Sair");
             opcaoAluno = scanner.nextInt();
-            scanner.nextLine(); 
-    
+            scanner.nextLine();
+
             switch (opcaoAluno) {
                 case 1:
-                    visualizarMatriculas(aluno);  
+                    visualizarMatriculas(aluno);
                     break;
-    
+
                 case 2:
-                    matricularEmDisciplina(scanner, aluno);  
+                    matricularEmDisciplina(scanner, aluno);
                     break;
-    
+
                 case 3:
-                    cancelarMatricula(scanner, aluno);  
+                    cancelarMatricula(scanner, aluno);
                     break;
-    
+
                 case 4:
                     limparTela();
                     break;
-    
+
                 default:
                     System.out.println(ANSI_RED + "Opção inválida." + ANSI_RESET);
                     break;
             }
         } while (opcaoAluno != 4);
     }
-    
+
     private static void visualizarMatriculas(Aluno aluno) {
         aluno.visualizarMatriculas();
     }
-    
+
     private static void matricularEmDisciplina(Scanner scanner, Aluno aluno) {
         Disciplina.listar();
         System.out.println("Digite o ID da disciplina para se matricular:");
         int idDisciplina = scanner.nextInt();
-        scanner.nextLine();  
-    
+        scanner.nextLine();
+
         Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
         if (disciplina != null) {
-            aluno.matricularEmDisciplina(disciplina); 
+            aluno.matricularEmDisciplina(disciplina);
         } else {
             System.out.println("Disciplina não encontrada.");
         }
     }
-    
+
     private static void cancelarMatricula(Scanner scanner, Aluno aluno) {
         List<Integer> disciplinasMatriculadas = Matricula.carregarDisciplinasDoAluno(aluno.getId());
         if (disciplinasMatriculadas.isEmpty()) {
@@ -198,14 +212,14 @@ public class Sistema {
                     System.out.println("ID: " + disc.getIdDisciplina() + " | Nome: " + disc.getNome());
                 }
             }
-    
+
             System.out.println("Digite o ID da disciplina para cancelar a matrícula:");
             int idDisciplinaCancelar = scanner.nextInt();
-            scanner.nextLine();  
-    
+            scanner.nextLine();
+
             Disciplina disciplinaCancelar = Disciplina.carregarPorId(idDisciplinaCancelar);
             if (disciplinaCancelar != null) {
-                aluno.cancelarMatricula(disciplinaCancelar);  
+                aluno.cancelarMatricula(disciplinaCancelar);
             } else {
                 System.out.println("Disciplina não encontrada.");
             }
@@ -220,7 +234,7 @@ public class Sistema {
             System.out.println("1 - Alunos matriculados");
             System.out.println("2 - Sair");
             opcaoProfessor = scanner.nextInt();
-            scanner.nextLine(); 
+            scanner.nextLine();
 
             switch (opcaoProfessor) {
                 case 1:
@@ -242,7 +256,7 @@ public class Sistema {
 
         System.out.println("Digite o ID da disciplina para ver os alunos matriculados:");
         int idDisciplina = scanner.nextInt();
-        scanner.nextLine(); 
+        scanner.nextLine();
 
         List<Aluno> alunosMatriculados = professor.getAlunosMatriculadosNaDisciplina(idDisciplina);
         if (alunosMatriculados.isEmpty()) {
@@ -302,10 +316,10 @@ public class Sistema {
                     do {
                         System.out.println("Digite o ID do curso ao qual a disciplina pertence:");
                         idCursoDisciplina = scanner.nextInt();
-                        if (!Curso.cursoExiste(idCursoDisciplina)) {
+                        if (!Curso.existe(idCursoDisciplina)) {
                             System.out.println("Curso não encontrado! Escolha um ID válido.");
                         }
-                    } while (!Curso.cursoExiste(idCursoDisciplina));
+                    } while (!Curso.existe(idCursoDisciplina));
                     scanner.nextLine();
 
                     Professor.listar();
@@ -372,7 +386,7 @@ public class Sistema {
 
                 case 7:
                     limparTela();
-                    break; 
+                    break;
 
                 default:
                     System.out.println(ANSI_RED + "Opção inválida." + ANSI_RESET);
