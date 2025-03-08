@@ -78,7 +78,7 @@ public class Disciplina {
     }
 
     public static void listar() {
-        System.out.println("\nDisciplinas disponíveis:");
+        System.out.println("Disciplinas disponíveis:");
         try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");
@@ -172,7 +172,7 @@ public class Disciplina {
     }
 
     public static void listarDisciplinasDoProfessor(int idProfessor) {
-        System.out.println("\nDisciplinas do professor:");
+        System.out.println("Disciplinas do professor:");
         try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");

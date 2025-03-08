@@ -116,7 +116,7 @@ public class Sistema {
                 limparTela();
 
                 if (usuarioCarregado.getTipoUsuario() != null && usuarioCarregado.getLogin().equals(loginLogin)) {
-                    System.out.println(ANSI_GREEN + "\nLogin bem-sucedido!" + ANSI_RESET);
+                    System.out.println(ANSI_GREEN + "Login bem-sucedido!" + ANSI_RESET);
                     System.out.println();
 
                     switch (usuarioCarregado.getTipoUsuario()) {
@@ -198,7 +198,7 @@ public class Sistema {
             aluno.matricularEmDisciplina(disciplina);
         } else {
             limparTela();
-            System.out.println(ANSI_RED + "\nDisciplina não encontrada.\n" + ANSI_RESET);
+            System.out.println(ANSI_RED + "Disciplina não encontrada.\n" + ANSI_RESET);
         }
     }
 
@@ -225,7 +225,7 @@ public class Sistema {
                 aluno.cancelarMatricula(disciplinaCancelar);
             } else {
                 limparTela();
-                System.out.println(ANSI_RED + "\nDisciplina não encontrada.\n" + ANSI_RESET);
+                System.out.println(ANSI_RED + "Disciplina não encontrada.\n" + ANSI_RESET);
             }
         }
     }
@@ -242,6 +242,7 @@ public class Sistema {
 
             switch (opcaoProfessor) {
                 case 1:
+                    limparTela();
                     exibirAlunosMatriculados(scanner, professor);
                     break;
 
@@ -258,18 +259,28 @@ public class Sistema {
     private static void exibirAlunosMatriculados(Scanner scanner, Professor professor) {
         Disciplina.listarDisciplinasDoProfessor(professor.getId());
 
-        System.out.println("Digite o ID da disciplina para ver os alunos matriculados:");
+        System.out.println("\nDigite o ID da disciplina para ver os alunos matriculados:");
+        System.out.print("> ");
         int idDisciplina = scanner.nextInt();
         scanner.nextLine();
 
-        List<Aluno> alunosMatriculados = professor.getAlunosMatriculadosNaDisciplina(idDisciplina);
-        if (alunosMatriculados.isEmpty()) {
-            System.out.println("Nenhum aluno matriculado nesta disciplina.");
-        } else {
-            System.out.println("Alunos matriculados na disciplina:");
-            for (Aluno aluno : alunosMatriculados) {
-                System.out.println("- " + aluno.getNome());
+        Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
+        if (disciplina != null) {
+            List<Aluno> alunosMatriculados = professor.getAlunosMatriculadosNaDisciplina(idDisciplina);
+            if (alunosMatriculados.isEmpty()) {
+                limparTela();
+                System.out.println("Nenhum aluno matriculado nesta disciplina.\n");
+            } else {
+                limparTela();
+                System.out.println("Alunos matriculados na disciplina:");
+                for (Aluno aluno : alunosMatriculados) {
+                    System.out.println("- " + aluno.getNome());
+                }
+                System.out.println();
             }
+        } else {
+            limparTela();
+            System.out.println(ANSI_RED + "Disciplina não encontrada.\n" + ANSI_RESET);
         }
     }
 
@@ -280,155 +291,219 @@ public class Sistema {
             System.out.println("Escolha uma opção:");
             System.out.println("1 - Cadastrar Curso");
             System.out.println("2 - Cadastrar Disciplina");
-            System.out.println("3 - Gerar currículo"); // ????
-            System.out.println("4 - Atualizar informacoes de disciplina");
-            System.out.println("5 - Atualizar informacoes de professor");
-            System.out.println("6 - Atualizar informacoes de aluno");
-            System.out.println("7 - Sair");
+            System.out.println("3 - Atualizar informacoes de disciplina");
+            System.out.println("4 - Atualizar informacoes de professor");
+            System.out.println("5 - Atualizar informacoes de aluno");
+            System.out.println("6 - Sair");
+            System.out.print("> ");
             opcaoSecretaria = scanner.nextInt();
             scanner.nextLine();
-
+    
             switch (opcaoSecretaria) {
                 case 1:
-                    System.out.println("Digite o nome do curso:");
-                    String nomeCurso = scanner.nextLine();
-
-                    System.out.println("Digite a quantidade de créditos do curso:");
-                    int creditosCurso = scanner.nextInt();
-                    scanner.nextLine();
-
-                    Curso curso = new Curso(nomeCurso, creditosCurso);
-                    curso.salvar();
-
-                    System.out.println("Curso cadastrado com sucesso!");
-
+                    cadastrarCurso(scanner);
                     break;
-
+    
                 case 2:
-                    System.out.println("Digite o nome da disciplina:");
-                    String nomeDisciplina = scanner.nextLine();
-
-                    System.out.println("Digite o custo da disciplina:");
-                    float custoDisciplina = scanner.nextFloat();
-                    scanner.nextLine();
-
-                    System.out.println("A disciplina é obrigatória? (sim/não):");
-                    String respostaObrigatoria = scanner.nextLine().toLowerCase();
-                    boolean obrigatoriaDisciplina = respostaObrigatoria.equals("sim");
-
-                    Curso.listar();
-                    int idCursoDisciplina;
-                    do {
-                        System.out.println("Digite o ID do curso ao qual a disciplina pertence:");
-                        idCursoDisciplina = scanner.nextInt();
-                        if (!Curso.existe(idCursoDisciplina)) {
-                            System.out.println("Curso não encontrado! Escolha um ID válido.");
-                        }
-                    } while (!Curso.existe(idCursoDisciplina));
-                    scanner.nextLine();
-
-                    Professor.listar();
-                    int idProfessorDisciplina;
-                    do {
-                        System.out.println("Digite o ID do professor que vai lecionar a disciplina:");
-                        idProfessorDisciplina = scanner.nextInt();
-                        if (!Professor.existe(idProfessorDisciplina)) {
-                            System.out.println("Professor não encontrado! Escolha um ID válido.");
-                        }
-                    } while (!Professor.existe(idProfessorDisciplina));
-                    scanner.nextLine();
-
-                    Disciplina novaDisciplina = new Disciplina(nomeDisciplina, custoDisciplina, obrigatoriaDisciplina,
-                            idCursoDisciplina, idProfessorDisciplina);
-                    novaDisciplina.salvar();
-
-                    System.out.println("Disciplina cadastrada com sucesso!");
-
+                    cadastrarDisciplina(scanner);
                     break;
-
+    
                 case 3:
-
+                    atualizarInformacoesDisciplina(scanner, usuarioCarregado);
                     break;
-
+    
                 case 4:
-                    Disciplina.listar();
-
-                    System.out.println("Digite o ID da disciplina que deseja atualizar:");
-                    int idDisciplina = scanner.nextInt();
-                    scanner.nextLine();
-
-                    System.out.println("Digite o novo nome da disciplina:");
-                    String novoNome = scanner.nextLine();
-
-                    System.out.println("Digite o novo custo da disciplina:");
-                    float novoCusto = scanner.nextInt();
-                    scanner.nextLine();
-
-                    System.out.println("A disciplina é obrigatória? (sim/não):");
-                    String resposta = scanner.nextLine().toLowerCase();
-                    boolean novaObrigatoriedade = resposta.equals("sim");
-
-                    System.out.println("Digite o novo status da disciplina (Aberta/Fechada):");
-                    String novoStatus = scanner.nextLine();
-
-                    if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
-                        Secretaria secretaria = (Secretaria) usuarioCarregado;
-                        secretaria.atualizarInformacoesDisciplina(idDisciplina, novoNome, novoCusto,
-                                novaObrigatoriedade, novoStatus);
-                    } else {
-                        System.out.println("Usuário não autorizado para atualizar a disciplina.");
-                    }
-
+                    atualizarInformacoesProfessor(scanner, usuarioCarregado);
                     break;
-
+    
                 case 5:
-                if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
-                    Professor.listar();
-            
-                    System.out.println("Digite o ID do professor que deseja atualizar:");
-                    int idProfessor = scanner.nextInt();
-                    scanner.nextLine(); 
-            
-                    System.out.println("Digite o novo nome do professor:");
-                    String novoNomeProfessor = scanner.nextLine();
-            
-                    Secretaria secretaria = (Secretaria) usuarioCarregado;
-                    secretaria.atualizarInformacoesProfessor(idProfessor, novoNomeProfessor);
-                } else {
-                    System.out.println("Usuário não autorizado para atualizar informações de professor.");
-                }
-                break;
-            
+                    atualizarInformacoesAluno(scanner, usuarioCarregado);
+                    break;
+    
                 case 6:
-                if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
-                    Aluno.listar();
-            
-                    System.out.println("Digite o ID do aluno que deseja atualizar:");
-                    int idAluno = scanner.nextInt();
-                    scanner.nextLine(); 
-            
-                    System.out.println("Digite o novo nome do aluno:");
-                    String novoNomeAluno = scanner.nextLine();
-            
-                    Secretaria secretaria = (Secretaria) usuarioCarregado;
-                    secretaria.atualizarInformacoesAluno(idAluno, novoNomeAluno);
-                } else {
-                    System.out.println("Usuário não autorizado para atualizar informações de aluno.");
-                }
-                break;
-
-                case 7:
                     limparTela();
                     break;
-
+    
                 default:
                     System.out.println(ANSI_RED + "Opção inválida." + ANSI_RESET);
             }
-        } while (opcaoSecretaria != 7);
+        } while (opcaoSecretaria != 6);
+    }
+    
+    public static void cadastrarCurso(Scanner scanner) {
+        System.out.println("\nDigite o nome do curso:");
+        System.out.print("> ");
+        String nomeCurso = scanner.nextLine();
+    
+        System.out.println("\nDigite a quantidade de créditos do curso:");
+        System.out.print("> ");
+        int creditosCurso = scanner.nextInt();
+        scanner.nextLine();
+    
+        limparTela();
+    
+        Curso curso = new Curso(nomeCurso, creditosCurso);
+        curso.salvar();
+    
+        System.out.println(ANSI_GREEN + "Curso cadastrado com sucesso!\n" + ANSI_RESET);
+    }
+    
+    public static void cadastrarDisciplina(Scanner scanner) {
+        System.out.println("\nDigite o nome da disciplina:");
+        System.out.print("> ");
+        String nomeDisciplina = scanner.nextLine();
+    
+        System.out.println("\nDigite o custo da disciplina:");
+        System.out.print("> ");
+        float custoDisciplina = scanner.nextFloat();
+        scanner.nextLine();
+    
+        System.out.println("\nA disciplina é obrigatória? (sim/não):");
+        System.out.print("> ");
+        String respostaObrigatoria = scanner.nextLine().toLowerCase();
+        boolean obrigatoriaDisciplina = respostaObrigatoria.equals("sim");
+    
+        Curso.listar();
+        int idCursoDisciplina;
+        do {
+            System.out.println("\nDigite o ID do curso ao qual a disciplina pertence:");
+            System.out.print("> ");
+            idCursoDisciplina = scanner.nextInt();
+            if (!Curso.existe(idCursoDisciplina)) {
+                System.out.println(ANSI_RED + "Curso não encontrado! Escolha um ID válido." + ANSI_RESET);
+            }
+        } while (!Curso.existe(idCursoDisciplina));
+        scanner.nextLine();
+    
+        Professor.listar();
+        int idProfessorDisciplina;
+        do {
+            System.out.println("\nDigite o ID do professor que vai lecionar a disciplina:");
+            System.out.print("> ");
+            idProfessorDisciplina = scanner.nextInt();
+            if (!Professor.existe(idProfessorDisciplina)) {
+                System.out.println(ANSI_RED + "\nProfessor não encontrado! Escolha um ID válido.\n" + ANSI_RESET);
+            }
+        } while (!Professor.existe(idProfessorDisciplina));
+        scanner.nextLine();
+    
+        limparTela();
+    
+        Disciplina novaDisciplina = new Disciplina(nomeDisciplina, custoDisciplina, obrigatoriaDisciplina,
+                idCursoDisciplina, idProfessorDisciplina);
+        novaDisciplina.salvar();
+    
+        System.out.println(ANSI_GREEN + "Disciplina cadastrada com sucesso!\n" + ANSI_RESET);
+    }
+    
+    public static void gerarCurriculo() {
+
+    }
+    
+    public static void atualizarInformacoesDisciplina(Scanner scanner, Usuario usuarioCarregado) {
+        limparTela();
+        Disciplina.listar();
+    
+        System.out.println("\nDigite o ID da disciplina que deseja atualizar:");
+        System.out.print("> ");
+        int idDisciplina = scanner.nextInt();
+        scanner.nextLine();
+    
+        Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
+        if (disciplina != null) {
+            System.out.println("\nDigite o novo nome da disciplina:");
+            System.out.print("> ");
+            String novoNome = scanner.nextLine();
+    
+            System.out.println("\nDigite o novo custo da disciplina:");
+            System.out.print("> ");
+            float novoCusto = scanner.nextInt();
+            scanner.nextLine();
+    
+            System.out.println("\nA disciplina é obrigatória? (sim/não):");
+            System.out.print("> ");
+            String resposta = scanner.nextLine().toLowerCase();
+            boolean novaObrigatoriedade = resposta.equals("sim");
+    
+            System.out.println("\nDigite o novo status da disciplina (Aberta/Fechada):");
+            System.out.print("> ");
+            String novoStatus = scanner.nextLine();
+    
+            limparTela();
+    
+            if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
+                Secretaria secretaria = (Secretaria) usuarioCarregado;
+                secretaria.atualizarInformacoesDisciplina(idDisciplina, novoNome, novoCusto,
+                        novaObrigatoriedade, novoStatus);
+            } else {
+                System.out.println(ANSI_RED + "\nUsuário não autorizado para atualizar a disciplina.\n" + ANSI_RESET);
+            }
+        } else {
+            limparTela();
+            System.out.println(ANSI_RED + "Disciplina não encontrada.\n" + ANSI_RESET);
+        }
+    }
+    
+    public static void atualizarInformacoesProfessor(Scanner scanner, Usuario usuarioCarregado) {
+        limparTela();
+        if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
+            Professor.listar();
+    
+            System.out.println("\nDigite o ID do professor que deseja atualizar:");
+            System.out.print("> ");
+            int idProfessor = scanner.nextInt();
+            scanner.nextLine();
+    
+            Professor professor = Professor.carregarPorId(idProfessor);
+            if (professor != null) {
+                System.out.println("\nDigite o novo nome do professor:");
+                System.out.print("> ");
+                String novoNomeProfessor = scanner.nextLine();
+    
+                limparTela();
+    
+                Secretaria secretaria = (Secretaria) usuarioCarregado;
+                secretaria.atualizarInformacoesProfessor(idProfessor, novoNomeProfessor);
+            } else {
+                limparTela();
+                System.out.println(ANSI_RED + "Professor não encontrado.\n" + ANSI_RESET);
+            }
+        } else {
+            System.out.println(ANSI_RED + "Usuário não autorizado para atualizar informações de professor." + ANSI_RESET);
+        }
+    }
+
+    public static void atualizarInformacoesAluno(Scanner scanner, Usuario usuarioCarregado) {
+        limparTela();
+        if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
+            Aluno.listar();
+    
+            System.out.println("\nDigite o ID do aluno que deseja atualizar:");
+            System.out.print("> ");
+            int idAluno = scanner.nextInt();
+            scanner.nextLine();
+    
+            Aluno aluno = Aluno.carregarPorId(idAluno);
+            if (aluno != null) {
+                System.out.println("\nDigite o novo nome do aluno:");
+                System.out.print("> ");
+                String novoNomeAluno = scanner.nextLine();
+    
+                limparTela();
+    
+                Secretaria secretaria = (Secretaria) usuarioCarregado;
+                secretaria.atualizarInformacoesAluno(idAluno, novoNomeAluno);
+            } else {
+                limparTela();
+                System.out.println(ANSI_RED + "Aluno não encontrado.\n" + ANSI_RESET);
+            }
+        } else {
+            System.out.println(ANSI_RED + "Usuário não autorizado para atualizar informações de aluno." + ANSI_RESET);
+        }
     }
 
     public static void limparTela() {
-        System.out.print("\u001B[H\u001B[2J");
+        System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 }

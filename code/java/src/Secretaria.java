@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.*;
 
 public class Secretaria extends Usuario {
-    private static final String TIPO_PROFESSOR = "PROFESSOR";
-    private static final String TIPO_ALUNO = "ALUNO";
 
     public Secretaria(String nome, String login, String senha) {
         super(nome, login, senha, TipoUsuario.SECRETARIA);
@@ -33,18 +31,18 @@ public class Secretaria extends Usuario {
 
         if (encontrado) {
             escreverArquivo(Disciplina.ARQUIVODISCIPLINA, linhas);
-            System.out.println("\n\u001B[32mDisciplina atualizada com sucesso!\u001B[0m\n");
+            System.out.println("\u001B[32mDisciplina atualizada com sucesso!\u001B[0m\n");
         } else {
-            System.out.println("\n\u001B[32mDisciplina não encontrada!\u001B[0m\n");
+            System.out.println("\u001B[32mDisciplina não encontrada!\u001B[0m\n");
         }
     }
 
     public void atualizarInformacoesProfessor(int idProfessor, String novoNome) {
-        atualizarInformacoesUsuario(idProfessor, novoNome, TIPO_PROFESSOR, Usuario.ARQUIVOUSUARIO);
+        atualizarInformacoesUsuario(idProfessor, novoNome, "PROFESSOR", Usuario.ARQUIVOUSUARIO);
     }
 
     public void atualizarInformacoesAluno(int idAluno, String novoNome) {
-        atualizarInformacoesUsuario(idAluno, novoNome, TIPO_ALUNO, Usuario.ARQUIVOUSUARIO);
+        atualizarInformacoesUsuario(idAluno, novoNome, "ALUNO", Usuario.ARQUIVOUSUARIO);
     }
 
     private void atualizarInformacoesUsuario(int idUsuario, String novoNome, String tipoUsuario, String caminhoArquivo) {
@@ -55,7 +53,7 @@ public class Secretaria extends Usuario {
             String[] dados = linhas.get(i).split(";");
             if (Integer.parseInt(dados[0]) == idUsuario && dados[4].equals(tipoUsuario)) {
                 encontrado = true;
-                dados[1] = novoNome; // Atualiza apenas o nome
+                dados[1] = novoNome;
                 linhas.set(i, String.join(";", dados));
                 break;
             }

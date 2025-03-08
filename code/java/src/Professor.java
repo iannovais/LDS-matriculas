@@ -6,6 +6,24 @@ public class Professor extends Usuario {
         super(nome, login, senha, TipoUsuario.PROFESSOR);
     }
 
+    public static Professor carregarPorId(int idProfessor) {
+        try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
+            while (scanner.hasNextLine()) {
+                String[] dados = scanner.nextLine().split(";");
+                int id = Integer.parseInt(dados[0]);
+                if (id == idProfessor && dados[4].equals("PROFESSOR")) {
+                    String nome = dados[1];
+                    String login = dados[2];
+                    String senha = dados[3];
+                    return new Professor(nome, login, senha);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo de usuários não encontrado.");
+        }
+        return null;
+    }
+
     public List<Aluno> getAlunosMatriculadosNaDisciplina(int idDisciplina) {
         Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
         if (disciplina != null && disciplina.getIdProfessor() == this.getId()) {
@@ -15,7 +33,7 @@ public class Professor extends Usuario {
     }
 
     public static void listar() {
-        System.out.println("\nProfessores disponíveis:");
+        System.out.println("Professores disponíveis:");
         try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");

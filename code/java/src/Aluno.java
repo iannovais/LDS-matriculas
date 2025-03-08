@@ -23,7 +23,7 @@ public class Aluno extends Usuario {
 
     public void matricularEmDisciplina(Disciplina disciplina) {
         if (Matricula.alunoJaMatriculado(this.getId(), disciplina.getIdDisciplina())) {
-            System.out.print("\u001B[H\u001B[2J"); //limpar tela
+            System.out.print("\033[H\033[2J"); //limpar tela
             System.out.println("\n\u001B[31mOPS! Você já está matriculado nesta disciplina.\u001B[0m\n");
             return;
         }
@@ -43,7 +43,7 @@ public class Aluno extends Usuario {
             }
         }
 
-        System.out.print("\u001B[H\u001B[2J"); //limpar tela
+        System.out.print("\033[H\033[2J"); //limpar tela
 
         if (disciplina.isEhObrigatoria()) {
             if (countObrigatorias >= MAXOBRIGATORIAS) {
@@ -60,7 +60,7 @@ public class Aluno extends Usuario {
         if (disciplina.matricularAluno(this)) {
             Matricula matricula = new Matricula(this.getId(), disciplina.getIdDisciplina(), true);
             matricula.salvar();
-            System.out.print("\u001B[H\u001B[2J"); //limpar tela
+            System.out.print("\033[H\033[2J"); //limpar tela
             System.out.println("\u001B[32mMatrícula realizada com sucesso!\u001B[0m\n");
         }
     }
@@ -73,7 +73,7 @@ public class Aluno extends Usuario {
                 matricula.setAtiva(false);
                 Matricula.atualizar(matriculas);
                 disciplina.cancelarMatricula(this);
-                System.out.print("\u001B[H\u001B[2J"); //limpar tela
+                System.out.print("\033[H\033[2J"); //limpar tela
                 System.out.println("\u001B[32mMatrícula cancelada com sucesso!\u001B[0m\n");
                 return;
             }
@@ -100,7 +100,7 @@ public class Aluno extends Usuario {
     }
 
     public static void listar() {
-        System.out.println("\nAlunos disponíveis:");
+        System.out.println("Alunos disponíveis:");
         try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
             while (scanner.hasNextLine()) {
                 String[] dados = scanner.nextLine().split(";");
