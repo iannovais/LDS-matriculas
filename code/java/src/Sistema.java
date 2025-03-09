@@ -32,7 +32,7 @@ public class Sistema {
                     break;
 
                 default:
-                    System.out.println(ANSI_RED + "Opção inválida." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
                     break;
             }
         } while (opcao != 3);
@@ -51,8 +51,7 @@ public class Sistema {
             System.out.print("> ");
             login = scanner.nextLine();
             if (Usuario.loginExiste(login)) {
-                System.out.println(
-                        ANSI_RED + "\nEste login já está em uso. Por favor, escolha outro login." + ANSI_RESET);
+                System.out.println(ANSI_RED + "OPS! Este login já está em uso. Por favor, escolha outro login." + ANSI_RESET);
             }
         } while (Usuario.loginExiste(login));
 
@@ -86,16 +85,16 @@ public class Sistema {
                     break;
 
                 default:
-                    System.out.println(ANSI_RED + "Tipo de usuário inválido." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "OPS! Tipo de usuário inválido." + ANSI_RESET);
             }
         } while (tipo < 1 || tipo > 3);
 
         try {
             Usuario.cadastrar(nome, login, senha, tipoUsuario);
             limparTela();
-            System.out.println(ANSI_GREEN + "Usuário cadastrado com sucesso!\n" + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "EBA! Usuário cadastrado com sucesso!\n" + ANSI_RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
+            System.out.println(ANSI_RED + "OPS! " + e.getMessage() + ANSI_RESET);
         }
     }
 
@@ -116,7 +115,7 @@ public class Sistema {
                 limparTela();
 
                 if (usuarioCarregado.getTipoUsuario() != null && usuarioCarregado.getLogin().equals(loginLogin)) {
-                    System.out.println(ANSI_GREEN + "Login bem-sucedido!" + ANSI_RESET);
+                    System.out.println(ANSI_GREEN + "EBA! Login bem-sucedido!" + ANSI_RESET);
                     System.out.println();
 
                     switch (usuarioCarregado.getTipoUsuario()) {
@@ -135,12 +134,12 @@ public class Sistema {
                 }
             } catch (IllegalArgumentException e) {
                 limparTela();
-                System.out.println(ANSI_RED + "\nOPS! Login ou senha incorretos. Tente novamente." + ANSI_RESET);
+                System.out.println(ANSI_RED + "OPS! Login ou senha incorretos. Tente novamente." + ANSI_RESET);
                 System.out.println();
             }
         } else {
             limparTela();
-            System.out.println(ANSI_RED + "\nOPS! Usuário não encontrado.\n" + ANSI_RESET);
+            System.out.println(ANSI_RED + "OPS! Login ou senha incorretos. Tente novamente." + ANSI_RESET);
         }
     }
 
@@ -176,7 +175,7 @@ public class Sistema {
                     break;
 
                 default:
-                    System.out.println(ANSI_RED + "Opção inválida." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
                     break;
             }
         } while (opcaoAluno != 4);
@@ -195,10 +194,10 @@ public class Sistema {
     
         Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
         if (disciplina != null) {
-            aluno.matricularEmDisciplina(disciplina); // Chamada do método atualizado
+            aluno.matricularEmDisciplina(disciplina);
         } else {
             limparTela();
-            System.out.println(ANSI_RED + "Disciplina não encontrada.\n" + ANSI_RESET);
+            System.out.println(ANSI_RED + "OPS! Disciplina não encontrada.\n" + ANSI_RESET);
         }
     }
 
@@ -225,7 +224,7 @@ public class Sistema {
                 aluno.cancelarMatricula(disciplinaCancelar);
             } else {
                 limparTela();
-                System.out.println(ANSI_RED + "Disciplina não encontrada.\n" + ANSI_RESET);
+                System.out.println(ANSI_RED + "OPS! Disciplina não encontrada.\n" + ANSI_RESET);
             }
         }
     }
@@ -251,7 +250,7 @@ public class Sistema {
                     break;
 
                 default:
-                    System.out.println(ANSI_RED + "Opção inválida." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
             }
         } while (opcaoProfessor != 2);
     }
@@ -280,7 +279,7 @@ public class Sistema {
             }
         } else {
             limparTela();
-            System.out.println(ANSI_RED + "Disciplina não encontrada.\n" + ANSI_RESET);
+            System.out.println(ANSI_RED + "OPS! Disciplina não encontrada.\n" + ANSI_RESET);
         }
     }
 
@@ -290,14 +289,17 @@ public class Sistema {
         do {
             System.out.println("Bem-vindo, Secretaria!");
             System.out.println("Escolha uma opção:");
-            System.out.println("1 - Cadastrar Curso");
-            System.out.println("2 - Cadastrar Disciplina");
+            System.out.println("1 - Cadastrar curso");
+            System.out.println("2 - Cadastrar disciplina");
             System.out.println("3 - Abrir período de matrículas");
             System.out.println("4 - Fechar período de matrículas");
             System.out.println("5 - Atualizar informações de disciplina");
             System.out.println("6 - Atualizar informações de professor");
             System.out.println("7 - Atualizar informações de aluno");
-            System.out.println("8 - Sair");
+            System.out.println("8 - Visualizar disciplinas");
+            System.out.println("9 - Visualizar professores");
+            System.out.println("10 - Visualizar alunos");
+            System.out.println("11 - Sair");
             System.out.print("> ");
             opcaoSecretaria = scanner.nextInt();
             scanner.nextLine();
@@ -316,7 +318,7 @@ public class Sistema {
                         Secretaria secretaria = (Secretaria) usuarioCarregado;
                         secretaria.abrirPeriodoMatriculas(); 
                     } else {
-                        System.out.println(ANSI_RED + "Apenas a secretaria pode abrir o período de matrículas." + ANSI_RESET);
+                        System.out.println(ANSI_RED + "OPS! Apenas a secretaria pode abrir o período de matrículas." + ANSI_RESET);
                     }
                     break;
 
@@ -325,7 +327,7 @@ public class Sistema {
                         Secretaria secretaria = (Secretaria) usuarioCarregado;
                         secretaria.fecharPeriodoMatriculas();
                     } else {
-                        System.out.println(ANSI_RED + "Apenas a secretaria pode fechar o período de matrículas." + ANSI_RESET);
+                        System.out.println(ANSI_RED + "OPS! Apenas a secretaria pode fechar o período de matrículas." + ANSI_RESET);
                     }
                     break;
 
@@ -343,12 +345,30 @@ public class Sistema {
 
                 case 8:
                     limparTela();
+                    Disciplina.listar();
+                    System.out.println();
+                    break;
+
+                case 9:
+                    limparTela();
+                    Professor.listar();
+                    System.out.println();
+                    break;
+                
+                case 10:
+                    limparTela();
+                    Aluno.listar();
+                    System.out.println();
+                    break;
+
+                case 11:
+                    limparTela();
                     break;
 
                 default:
-                    System.out.println(ANSI_RED + "Opção inválida." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
             }
-        } while (opcaoSecretaria != 8); 
+        } while (opcaoSecretaria != 11); 
     }
     
     public static void cadastrarCurso(Scanner scanner) {
@@ -366,7 +386,7 @@ public class Sistema {
         Curso curso = new Curso(nomeCurso, creditosCurso);
         curso.salvar();
     
-        System.out.println(ANSI_GREEN + "Curso cadastrado com sucesso!\n" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "EBA! Curso cadastrado com sucesso!\n" + ANSI_RESET);
     }
     
     public static void cadastrarDisciplina(Scanner scanner) {
@@ -391,7 +411,7 @@ public class Sistema {
             System.out.print("> ");
             idCursoDisciplina = scanner.nextInt();
             if (!Curso.existe(idCursoDisciplina)) {
-                System.out.println(ANSI_RED + "Curso não encontrado! Escolha um ID válido." + ANSI_RESET);
+                System.out.println(ANSI_RED + "OPS! Curso não encontrado! Escolha um ID válido." + ANSI_RESET);
             }
         } while (!Curso.existe(idCursoDisciplina));
         scanner.nextLine();
@@ -403,7 +423,7 @@ public class Sistema {
             System.out.print("> ");
             idProfessorDisciplina = scanner.nextInt();
             if (!Professor.existe(idProfessorDisciplina)) {
-                System.out.println(ANSI_RED + "\nProfessor não encontrado! Escolha um ID válido.\n" + ANSI_RESET);
+                System.out.println(ANSI_RED + "\nOPS! Professor não encontrado! Escolha um ID válido.\n" + ANSI_RESET);
             }
         } while (!Professor.existe(idProfessorDisciplina));
         scanner.nextLine();
@@ -414,7 +434,7 @@ public class Sistema {
                 idCursoDisciplina, idProfessorDisciplina);
         novaDisciplina.salvar();
 
-        System.out.println(ANSI_GREEN + "Disciplina cadastrada com sucesso!\n" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "EBA! Disciplina cadastrada com sucesso!\n" + ANSI_RESET);
     }
     
     public static void gerarCurriculo() {
@@ -452,11 +472,11 @@ public class Sistema {
                 Secretaria secretaria = (Secretaria) usuarioCarregado;
                 secretaria.atualizarInformacoesDisciplina(idDisciplina, novoNome, novoCusto, novaObrigatoriedade);
             } else {
-                System.out.println(ANSI_RED + "\nUsuário não autorizado para atualizar a disciplina.\n" + ANSI_RESET);
+                System.out.println(ANSI_RED + "OPS! Usuário não autorizado para atualizar a disciplina.\n" + ANSI_RESET);
             }
         } else {
             limparTela();
-            System.out.println(ANSI_RED + "Disciplina não encontrada.\n" + ANSI_RESET);
+            System.out.println(ANSI_RED + "OPS! Disciplina não encontrada.\n" + ANSI_RESET);
         }
     }
     
@@ -482,10 +502,10 @@ public class Sistema {
                 secretaria.atualizarInformacoesProfessor(idProfessor, novoNomeProfessor);
             } else {
                 limparTela();
-                System.out.println(ANSI_RED + "Professor não encontrado.\n" + ANSI_RESET);
+                System.out.println(ANSI_RED + "OPS! Professor não encontrado.\n" + ANSI_RESET);
             }
         } else {
-            System.out.println(ANSI_RED + "Usuário não autorizado para atualizar informações de professor." + ANSI_RESET);
+            System.out.println(ANSI_RED + "OPS! Usuário não autorizado para atualizar informações de professor." + ANSI_RESET);
         }
     }
 
@@ -511,10 +531,10 @@ public class Sistema {
                 secretaria.atualizarInformacoesAluno(idAluno, novoNomeAluno);
             } else {
                 limparTela();
-                System.out.println(ANSI_RED + "Aluno não encontrado.\n" + ANSI_RESET);
+                System.out.println(ANSI_RED + "OPS! Aluno não encontrado.\n" + ANSI_RESET);
             }
         } else {
-            System.out.println(ANSI_RED + "Usuário não autorizado para atualizar informações de aluno." + ANSI_RESET);
+            System.out.println(ANSI_RED + "OPS! Usuário não autorizado para atualizar informações de aluno." + ANSI_RESET);
         }
     }
 

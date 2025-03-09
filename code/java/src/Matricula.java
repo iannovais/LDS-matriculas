@@ -45,6 +45,9 @@ public class Matricula {
         if (periodoAberto) {
             System.out.print("\033[H\033[2J");
             System.out.println("\u001B[32mPeríodo de matrículas aberto com sucesso!\u001B[0m\n");
+        } else {
+            System.out.print("\033[H\033[2J");
+            System.out.println("\u001B[31mNão foi possível abrir o período de matrículas, pois não há nenhuma matéria disponível.\u001B[0m\n");
         }
     }
 
@@ -67,6 +70,9 @@ public class Matricula {
         if (periodoFechado) {
             System.out.print("\033[H\033[2J");
             System.out.println("\u001B[32mPeríodo de matrículas fechado com sucesso!\u001B[0m\n");
+        } else {
+            System.out.print("\033[H\033[2J");
+            System.out.println("\u001B[31mNão foi possível fechar o período de matrículas, pois não há nenhuma matéria disponível.\u001B[0m\n");
         }
     }
 
