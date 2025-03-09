@@ -178,7 +178,7 @@ public class Usuario {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("\n\u001B[32mInformações atualizadas com sucesso!\u001B[0m\n");
+            System.out.println("\u001B[32mInformações atualizadas com sucesso!\u001B[0m\n");
         } else {
             System.out.println("\n\u001B[32m" + tipoUsuario.toString().toLowerCase() + " não encontrado!\u001B[0m\n");
         }

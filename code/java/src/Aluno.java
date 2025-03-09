@@ -12,7 +12,7 @@ public class Aluno extends Usuario {
     public void matricularEmDisciplina(Disciplina disciplina) {
         if (disciplina.getStatus() != StatusDisciplina.ATIVA) {
             System.out.print("\033[H\033[2J"); // Limpar tela
-            System.out.println("\n\u001B[31mOPS! Esta disciplina não está disponível para matrícula.\u001B[0m\n");
+            System.out.println("\u001B[31mOPS! Esta disciplina não está disponível para matrícula.\u001B[0m\n");
             return;
         }
     
@@ -77,7 +77,7 @@ public class Aluno extends Usuario {
 
     public void visualizarMatriculas() {
         List<Integer> disciplinasIds = Matricula.carregarDisciplinasDoAluno(this.getId());
-        System.out.println("\nVocê está matrículado nas seguintes matérias: ");
+        System.out.println("Você está matrículado nas seguintes matérias: ");
         for (int idDisciplina : disciplinasIds) {
             Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
             if (disciplina != null) {

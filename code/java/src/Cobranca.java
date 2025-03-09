@@ -33,7 +33,7 @@ public class Cobranca {
 
     public void consultarCobranca() {
         System.out.print("\033[H\033[2J");
-        System.out.println("\nDisciplinas cobradas:");
+        System.out.println("Disciplinas cobradas:");
         for (Disciplina disciplina : disciplinasCobradas) {
             System.out.println("- " + disciplina.getNome() + " (R$ " + disciplina.getCusto() + ")");
         }

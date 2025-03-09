@@ -31,8 +31,9 @@ public class Sistema {
                     limparTela();
                     break;
 
-                default:
-                    System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
+                default:   
+                    limparTela();
+                    System.out.println(ANSI_RED + "OPS! Opção inválida.\n" + ANSI_RESET);
                     break;
             }
         } while (opcao != 3);
@@ -140,7 +141,7 @@ public class Sistema {
             }
         } else {
             limparTela();
-            System.out.println(ANSI_RED + "OPS! Login ou senha incorretos. Tente novamente." + ANSI_RESET);
+            System.out.println(ANSI_RED + "OPS! Login ou senha incorretos. Tente novamente.\n" + ANSI_RESET);
         }
     }
 
@@ -160,18 +161,22 @@ public class Sistema {
 
             switch (opcaoAluno) {
                 case 1:
+                    limparTela();
                     visualizarMatriculas(aluno);
                     break;
 
                 case 2:
+                    limparTela();
                     matricularEmDisciplina(scanner, aluno);
                     break;
 
                 case 3:
+                    limparTela();
                     cancelarMatricula(scanner, aluno);
                     break;
 
                 case 4:
+                    limparTela();
                     valorSemeste(aluno);
                     break;
 
@@ -180,7 +185,8 @@ public class Sistema {
                     break;
 
                 default:
-                    System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
+                    limparTela();
+                    System.out.println(ANSI_RED + "OPS! Opção inválida.\n" + ANSI_RESET);
                     break;
             }
         } while (opcaoAluno != 5);
@@ -211,7 +217,7 @@ public class Sistema {
         if (disciplinasMatriculadas.isEmpty()) {
             System.out.println("\nVocê não está matriculado em nenhuma disciplina.");
         } else {
-            System.out.println("\nDisciplinas matriculadas:");
+            System.out.println("Disciplinas matriculadas:");
             for (int id : disciplinasMatriculadas) {
                 Disciplina disc = Disciplina.carregarPorId(id);
                 if (disc != null) {
@@ -258,7 +264,8 @@ public class Sistema {
                     break;
 
                 default:
-                    System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
+                    limparTela();
+                    System.out.println(ANSI_RED + "OPS! Opção inválida.\n" + ANSI_RESET);
             }
         } while (opcaoProfessor != 2);
     }
@@ -341,7 +348,8 @@ public class Sistema {
                     break;
 
                 default:
-                    System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
+                    limparTela();
+                    System.out.println(ANSI_RED + "OPS! Opção inválida.\n" + ANSI_RESET);
             }
         } while (opcaoSecretaria != 8);
     }
