@@ -1,6 +1,19 @@
 ```code
 @startuml
 
+enum TipoUsuario {
+    ALUNO
+    PROFESSOR
+    SECRETARIA
+}
+
+enum StatusDisciplina {
+    ATIVA
+    CANCELADA
+    ENCERRADA
+    CRIADA
+}
+
 class Usuario {
     # ARQUIVOUSUARIO : string
 
