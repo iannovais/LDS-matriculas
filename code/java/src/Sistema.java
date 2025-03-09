@@ -51,7 +51,8 @@ public class Sistema {
             System.out.print("> ");
             login = scanner.nextLine();
             if (Usuario.loginExiste(login)) {
-                System.out.println(ANSI_RED + "OPS! Este login já está em uso. Por favor, escolha outro login." + ANSI_RESET);
+                System.out.println(
+                        ANSI_RED + "OPS! Este login já está em uso. Por favor, escolha outro login." + ANSI_RESET);
             }
         } while (Usuario.loginExiste(login));
 
@@ -147,12 +148,12 @@ public class Sistema {
         int opcaoAluno;
 
         do {
-            System.out.println("Bem-vindo, Aluno!");
             System.out.println("Escolha uma opção:");
             System.out.println("1 - Visualizar matrículas");
             System.out.println("2 - Matricular em disciplina");
             System.out.println("3 - Cancelar matrícula");
-            System.out.println("4 - Sair");
+            System.out.println("4 - Consultar valor do semestre");
+            System.out.println("5 - Sair");
             System.out.print("> ");
             opcaoAluno = scanner.nextInt();
             scanner.nextLine();
@@ -171,6 +172,10 @@ public class Sistema {
                     break;
 
                 case 4:
+                    valorSemeste(aluno);
+                    break;
+
+                case 5:
                     limparTela();
                     break;
 
@@ -178,7 +183,7 @@ public class Sistema {
                     System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
                     break;
             }
-        } while (opcaoAluno != 4);
+        } while (opcaoAluno != 5);
     }
 
     private static void visualizarMatriculas(Aluno aluno) {
@@ -191,7 +196,7 @@ public class Sistema {
         System.out.print("> ");
         int idDisciplina = scanner.nextInt();
         scanner.nextLine();
-    
+
         Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
         if (disciplina != null) {
             aluno.matricularEmDisciplina(disciplina);
@@ -229,10 +234,13 @@ public class Sistema {
         }
     }
 
+    private static void valorSemeste(Aluno aluno) {
+        aluno.consultarCobranca();
+    }
+    
     public static void menuProfessor(Scanner scanner, Professor professor) {
         int opcaoProfessor;
         do {
-            System.out.println("Bem-vindo, Professor!");
             System.out.println("Escolha uma opção:");
             System.out.println("1 - Alunos matriculados");
             System.out.println("2 - Sair");
@@ -283,11 +291,9 @@ public class Sistema {
         }
     }
 
-
     public static void menuSecretaria(Scanner scanner, Usuario usuarioCarregado) {
         int opcaoSecretaria;
         do {
-            System.out.println("Bem-vindo, Secretaria!");
             System.out.println("Escolha uma opção:");
             System.out.println("1 - Cadastrar curso");
             System.out.println("2 - Cadastrar disciplina");
@@ -296,10 +302,7 @@ public class Sistema {
             System.out.println("5 - Atualizar informações de disciplina");
             System.out.println("6 - Atualizar informações de professor");
             System.out.println("7 - Atualizar informações de aluno");
-            System.out.println("8 - Visualizar disciplinas");
-            System.out.println("9 - Visualizar professores");
-            System.out.println("10 - Visualizar alunos");
-            System.out.println("11 - Sair");
+            System.out.println("8 - Sair");
             System.out.print("> ");
             opcaoSecretaria = scanner.nextInt();
             scanner.nextLine();
@@ -314,21 +317,11 @@ public class Sistema {
                     break;
 
                 case 3:
-                    if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
-                        Secretaria secretaria = (Secretaria) usuarioCarregado;
-                        secretaria.abrirPeriodoMatriculas(); 
-                    } else {
-                        System.out.println(ANSI_RED + "OPS! Apenas a secretaria pode abrir o período de matrículas." + ANSI_RESET);
-                    }
+                    controlarPeriodoMatriculas(usuarioCarregado, true);
                     break;
 
                 case 4:
-                    if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
-                        Secretaria secretaria = (Secretaria) usuarioCarregado;
-                        secretaria.fecharPeriodoMatriculas();
-                    } else {
-                        System.out.println(ANSI_RED + "OPS! Apenas a secretaria pode fechar o período de matrículas." + ANSI_RESET);
-                    }
+                    controlarPeriodoMatriculas(usuarioCarregado, false);
                     break;
 
                 case 5:
@@ -345,50 +338,32 @@ public class Sistema {
 
                 case 8:
                     limparTela();
-                    Disciplina.listar();
-                    System.out.println();
-                    break;
-
-                case 9:
-                    limparTela();
-                    Professor.listar();
-                    System.out.println();
-                    break;
-                
-                case 10:
-                    limparTela();
-                    Aluno.listar();
-                    System.out.println();
-                    break;
-
-                case 11:
-                    limparTela();
                     break;
 
                 default:
                     System.out.println(ANSI_RED + "OPS! Opção inválida." + ANSI_RESET);
             }
-        } while (opcaoSecretaria != 11); 
+        } while (opcaoSecretaria != 8);
     }
-    
+
     public static void cadastrarCurso(Scanner scanner) {
         System.out.println("\nDigite o nome do curso:");
         System.out.print("> ");
         String nomeCurso = scanner.nextLine();
-    
+
         System.out.println("\nDigite a quantidade de créditos do curso:");
         System.out.print("> ");
         int creditosCurso = scanner.nextInt();
         scanner.nextLine();
-    
+
         limparTela();
-    
+
         Curso curso = new Curso(nomeCurso, creditosCurso);
         curso.salvar();
-    
+
         System.out.println(ANSI_GREEN + "EBA! Curso cadastrado com sucesso!\n" + ANSI_RESET);
     }
-    
+
     public static void cadastrarDisciplina(Scanner scanner) {
         System.out.println("\nDigite o nome da disciplina:");
         System.out.print("> ");
@@ -436,68 +411,78 @@ public class Sistema {
 
         System.out.println(ANSI_GREEN + "EBA! Disciplina cadastrada com sucesso!\n" + ANSI_RESET);
     }
-    
-    public static void gerarCurriculo() {
 
+    public static void controlarPeriodoMatriculas(Usuario usuarioCarregado, boolean abrirPeriodo) {
+        if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
+            Secretaria secretaria = (Secretaria) usuarioCarregado;
+            if (abrirPeriodo) {
+                secretaria.abrirPeriodoMatriculas();
+            } else {
+                secretaria.fecharPeriodoMatriculas();
+            }
+        } else {
+            System.out.println(ANSI_RED + "OPS! Apenas a secretaria pode " + (abrirPeriodo ? "abrir" : "fechar") + " o período de matrículas." + ANSI_RESET);
+        }
     }
-    
+
     public static void atualizarInformacoesDisciplina(Scanner scanner, Usuario usuarioCarregado) {
         limparTela();
         Disciplina.listar();
-    
+
         System.out.println("\nDigite o ID da disciplina que deseja atualizar:");
         System.out.print("> ");
         int idDisciplina = scanner.nextInt();
         scanner.nextLine();
-    
+
         Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
         if (disciplina != null) {
             System.out.println("\nDigite o novo nome da disciplina:");
             System.out.print("> ");
             String novoNome = scanner.nextLine();
-    
+
             System.out.println("\nDigite o novo custo da disciplina:");
             System.out.print("> ");
             float novoCusto = scanner.nextInt();
             scanner.nextLine();
-    
+
             System.out.println("\nA disciplina é obrigatória? (sim/não):");
             System.out.print("> ");
             String resposta = scanner.nextLine().toLowerCase();
             boolean novaObrigatoriedade = resposta.equals("sim");
-    
+
             limparTela();
-    
+
             if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
                 Secretaria secretaria = (Secretaria) usuarioCarregado;
                 secretaria.atualizarInformacoesDisciplina(idDisciplina, novoNome, novoCusto, novaObrigatoriedade);
             } else {
-                System.out.println(ANSI_RED + "OPS! Usuário não autorizado para atualizar a disciplina.\n" + ANSI_RESET);
+                System.out
+                        .println(ANSI_RED + "OPS! Usuário não autorizado para atualizar a disciplina.\n" + ANSI_RESET);
             }
         } else {
             limparTela();
             System.out.println(ANSI_RED + "OPS! Disciplina não encontrada.\n" + ANSI_RESET);
         }
     }
-    
+
     public static void atualizarInformacoesProfessor(Scanner scanner, Usuario usuarioCarregado) {
         limparTela();
         if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
             Professor.listar();
-    
+
             System.out.println("\nDigite o ID do professor que deseja atualizar:");
             System.out.print("> ");
             int idProfessor = scanner.nextInt();
             scanner.nextLine();
-    
+
             Professor professor = Professor.carregarPorId(idProfessor);
             if (professor != null) {
                 System.out.println("\nDigite o novo nome do professor:");
                 System.out.print("> ");
                 String novoNomeProfessor = scanner.nextLine();
-    
+
                 limparTela();
-    
+
                 Secretaria secretaria = (Secretaria) usuarioCarregado;
                 secretaria.atualizarInformacoesProfessor(idProfessor, novoNomeProfessor);
             } else {
@@ -505,7 +490,8 @@ public class Sistema {
                 System.out.println(ANSI_RED + "OPS! Professor não encontrado.\n" + ANSI_RESET);
             }
         } else {
-            System.out.println(ANSI_RED + "OPS! Usuário não autorizado para atualizar informações de professor." + ANSI_RESET);
+            System.out.println(
+                    ANSI_RED + "OPS! Usuário não autorizado para atualizar informações de professor." + ANSI_RESET);
         }
     }
 
@@ -513,20 +499,20 @@ public class Sistema {
         limparTela();
         if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
             Aluno.listar();
-    
+
             System.out.println("\nDigite o ID do aluno que deseja atualizar:");
             System.out.print("> ");
             int idAluno = scanner.nextInt();
             scanner.nextLine();
-    
+
             Aluno aluno = Aluno.carregarPorId(idAluno);
             if (aluno != null) {
                 System.out.println("\nDigite o novo nome do aluno:");
                 System.out.print("> ");
                 String novoNomeAluno = scanner.nextLine();
-    
+
                 limparTela();
-    
+
                 Secretaria secretaria = (Secretaria) usuarioCarregado;
                 secretaria.atualizarInformacoesAluno(idAluno, novoNomeAluno);
             } else {
@@ -534,7 +520,8 @@ public class Sistema {
                 System.out.println(ANSI_RED + "OPS! Aluno não encontrado.\n" + ANSI_RESET);
             }
         } else {
-            System.out.println(ANSI_RED + "OPS! Usuário não autorizado para atualizar informações de aluno." + ANSI_RESET);
+            System.out.println(
+                    ANSI_RED + "OPS! Usuário não autorizado para atualizar informações de aluno." + ANSI_RESET);
         }
     }
 

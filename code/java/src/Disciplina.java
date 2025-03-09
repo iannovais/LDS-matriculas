@@ -42,6 +42,10 @@ public class Disciplina {
         return numeroMatriculados;
     }
 
+    public float getCusto() {
+        return custo;
+    }
+
     public boolean isEhObrigatoria() {
         return ehObrigatoria;
     }

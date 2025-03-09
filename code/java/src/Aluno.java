@@ -118,4 +118,13 @@ public class Aluno extends Usuario {
             System.out.println("Nenhum professor cadastrado.");
         }
     }
+
+    public void consultarCobranca() {
+        Cobranca cobranca = new Cobranca(this);
+        if (cobranca.gerarCobranca()) {
+            cobranca.consultarCobranca();
+        } else {
+            System.out.println("Erro ao gerar cobrança.");
+        }
+    }
 }
