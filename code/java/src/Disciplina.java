@@ -89,7 +89,7 @@ public class Disciplina {
         return ultimoId + 1;
     }
 
-    public static void listar() {
+    public static void listarDisciplinas() {
         System.out.println("Disciplinas disponíveis:");
         try (Scanner scanner = new Scanner(new File(ARQUIVODISCIPLINA))) {
             while (scanner.hasNextLine()) {
@@ -114,7 +114,7 @@ public class Disciplina {
         }
     }
 
-    public void cancelarMatricula(Aluno aluno) {
+    public void cancelarMatriculaAluno(Aluno aluno) {
         numeroMatriculados--;
         atualizarArquivoDisciplina();
     }

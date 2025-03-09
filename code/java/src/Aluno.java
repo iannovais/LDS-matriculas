@@ -9,18 +9,6 @@ public class Aluno extends Usuario {
         super(nome, login, senha, TipoUsuario.ALUNO);
     }
 
-    public void visualizarMatriculas() {
-        List<Integer> disciplinasIds = Matricula.carregarDisciplinasDoAluno(this.getId());
-        System.out.println("\nVocê está matrículado nas seguintes matérias: ");
-        for (int idDisciplina : disciplinasIds) {
-            Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
-            if (disciplina != null) {
-                System.out.println("- " + disciplina.getNome());
-            }
-        }
-        System.out.println();
-    }
-
     public void matricularEmDisciplina(Disciplina disciplina) {
         if (disciplina.getStatus() != StatusDisciplina.ATIVA) {
             System.out.print("\033[H\033[2J"); // Limpar tela
@@ -72,19 +60,31 @@ public class Aluno extends Usuario {
     }
 
     public void cancelarMatricula(Disciplina disciplina) {
-        List<Matricula> matriculas = Matricula.carregar();
+        List<Matricula> matriculas = Matricula.carregarTodasMatriculas();
         for (Matricula matricula : matriculas) {
             if (matricula.getIdAluno() == this.getId() && matricula.getIdDisciplina() == disciplina.getIdDisciplina()
                     && matricula.isAtiva()) {
                 matricula.setAtiva(false);
-                Matricula.atualizar(matriculas);
-                disciplina.cancelarMatricula(this);
+                Matricula.atualizarArquivo(matriculas);
+                disciplina.cancelarMatriculaAluno(this);
                 System.out.print("\033[H\033[2J"); //limpar tela
                 System.out.println("\u001B[32mMatrícula cancelada com sucesso!\u001B[0m\n");
                 return;
             }
         }
         System.out.println("Aluno não está matriculado nesta disciplina.");
+    }
+
+    public void visualizarMatriculas() {
+        List<Integer> disciplinasIds = Matricula.carregarDisciplinasDoAluno(this.getId());
+        System.out.println("\nVocê está matrículado nas seguintes matérias: ");
+        for (int idDisciplina : disciplinasIds) {
+            Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
+            if (disciplina != null) {
+                System.out.println("- " + disciplina.getNome());
+            }
+        }
+        System.out.println();
     }
 
     public static Aluno carregarPorId(int idAluno) {
@@ -105,7 +105,7 @@ public class Aluno extends Usuario {
         return null;
     }
 
-    public static void listar() {
+    public static void listarAlunos() {
         System.out.println("Alunos disponíveis:");
         try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
             while (scanner.hasNextLine()) {

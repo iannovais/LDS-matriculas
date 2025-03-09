@@ -23,7 +23,7 @@ public class Curso {
         }
     }
 
-    public static void listar() {
+    public static void listarCursos() {
         System.out.println("\nCursos disponíveis:");
         try (Scanner scanner = new Scanner(new File(ARQUIVOCURSO))) {
             while (scanner.hasNextLine()) {

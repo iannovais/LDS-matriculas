@@ -85,7 +85,7 @@ public class Matricula {
         }
     }
 
-    public static List<Matricula> carregar() {
+    public static List<Matricula> carregarTodasMatriculas() {
         List<Matricula> matriculas = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(ARQUIVOMATRICULAS))) {
             String linha;
@@ -102,7 +102,7 @@ public class Matricula {
         return matriculas;
     }
 
-    public static void atualizar(List<Matricula> matriculas) {
+    public static void atualizarArquivo(List<Matricula> matriculas) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVOMATRICULAS))) {
             for (Matricula matricula : matriculas) {
                 writer.write(matricula.getIdAluno() + ";" + matricula.getIdDisciplina() + ";" + matricula.isAtiva());
@@ -115,7 +115,7 @@ public class Matricula {
 
     public static List<Integer> carregarDisciplinasDoAluno(int idAluno) {
         List<Integer> disciplinasIds = new ArrayList<>();
-        for (Matricula matricula : carregar()) {
+        for (Matricula matricula : carregarTodasMatriculas()) {
             if (matricula.getIdAluno() == idAluno && matricula.isAtiva()) {
                 disciplinasIds.add(matricula.getIdDisciplina());
             }
@@ -124,7 +124,7 @@ public class Matricula {
     }
 
     public static boolean alunoJaMatriculado(int idAluno, int idDisciplina) {
-        for (Matricula matricula : carregar()) {
+        for (Matricula matricula : carregarTodasMatriculas()) {
             if (matricula.getIdAluno() == idAluno && matricula.getIdDisciplina() == idDisciplina
                     && matricula.isAtiva()) {
                 return true;

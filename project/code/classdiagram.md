@@ -2,77 +2,110 @@
 @startuml
 
 class Usuario {
+    # ARQUIVOUSUARIO : string
+
     - id : int
     - nome: string
     - login : string
     - senha : string
+    - tipoUsuario : TipoUsuario
 
-    + entrar(senha : string) : void
-    + cadastrar(nome : string, login : string, senha : string) : void
-    + sair() : void
+    + entrar(login : string, senha : string) : void
+    + cadastrar(nome : string, login : string, senha : string, tipoUsuario : TipoUsuario) : Usuario
+    + salvar() : void
+    + carregar(login : string) : Usuario
+    + loginExiste(login : string) : boolean
+    + atualizar(idUsuario : int, novoNome : string, tipoUsuario : TipoUsuario) : void
 }
 
 class Aluno {
-    - MAXOBRIGATORIAS : int = 4
-    - MAXOPTATIVAS : int = 2
-    - curso : Curso
+    - MAXOBRIGATORIAS : int 
+    - MAXOPTATIVAS : int 
 
     + matricularEmDisciplina(disciplina : Disciplina) : void
     + cancelarMatricula(disciplina : Disciplina) : void
-    + confirmarMatricula() : void
+    + visualizarMatriculas() : void
+    + listarAlunos() : void
+    + consultarCobranca() : void
 }
 
 class Professor {
-    - disciplinas : List<Disciplina>
 
-    + alunosMatriculados(disciplina : Disciplina) : List<Aluno>
+    + alunosMatriculadosNaDisciplina(idDisciplina : int) : List<Aluno>
+    + listarProfessores() : void
+    + existe(idProfessor : int) : boolean
 }
 
 class Secretaria {
 
-    + gerarCurriculo() : void
-    + atualizarInformacoesDisciplina() : void
-    + atualizarInformacoesProfessor() : void
-    + atualizarInformacoesAluno() : void
+    + atualizarInformacoesDisciplina(idDisciplina : int, novoNome : String, novoCusto : float, novaObrigatoriedade : boolean) : void
+    + atualizarInformacoesProfessor(idProfessor : int, novoNome : string) : void
+    + atualizarInformacoesAluno(idAluno : int, novoNome : string) : void
+    + abrirPeriodoMatriculas() : void
+    + fecharPeriodoMatriculasfecharPeriodoMatriculas() : void
 }
 
 class Disciplina {
-    - MINIMOALUNOS : int = 3
-    - LIMITEALUNOS : int = 60 
+    # ARQUIVODISCIPLINA : string
+    - MINIMOALUNOS : int
+    - LIMITEALUNOS : int
+    
+    - idDisciplina : int
     - nome : string
-    - creditos : int
     - custo : float
+    - idCurso : int
+    - idProfessor : int
     - ehObrigatoria : bool
-    - alunosMatriculados : List<Aluno>
-    - status : string
+    - status : StatusDisciplina
+    - numeroMatriculados : int
 
-    + statusDisciplina() : string
-    + gerarCurriculo() : void
-    + fecharMatriculas() : void
-    + adicionarAluno(aluno : Aluno) : void
-    + removerAluno(aluno : Aluno) : void
-    + alunosMatriculados() : List<Aluno>
-    + cancelarDisciplina() : void
+    + salvar() : void
+    + listarDisciplinas() : void
+    + carregarTodasDisciplinas() : List<Disciplina>
+    + matricularAluno(aluno : Aluno) : boolean
+    + cancelarMatriculaAluno (aluno : Aluno) : void
+    + verificarQuantidadeAlunosDisciplina() : void
+    + atualizarInformacoes(novoNome : string, novoCusto : float, novaObrigatoriedade : boolean) : void
+    + listarDisciplinasDoProfessor(idProfessor : int) : void
+}
+
+class Matricula {
+    # ARQUIVOMATRICULAS : string
+    
+    - idAluno : int
+    - idDisciplina : int
+    - ativa : boolean
+
+    + abrirPeriodoMatriculas() : void
+    + fecharPeriodoMatriculas() : void
+    + salvar() : void
+    + carregarTodasMatriculas() : List<Matricula>
+    + atualizarArquivo(matriculas : List<Matricula>) : void
+    + carregarDisciplinasDoAluno(idAluno : int) : List<Integer>
+    + alunoJaMatriculado(idAluno : int, idDisciplina : int) : boolean
+    + getAlunosMatriculadosNaDisciplina(idDisciplina : int) : List<Aluno>
 }
 
 class Curso {
+    # ARQUIVOCURSO : string
+
     - idCurso : int
     - nome : string
     - creditos : int
-    - disciplinas : List<Disciplina>
 
-    + adicionarDisciplina(disciplina : Disciplina) : void
+    + salvar() : void
+    + listarCursos() : void
+    + existe(idCurso : int) : boolean
 }
 
 class Cobranca {
-    - idCobranca : int
     - aluno : Aluno
     - disciplinasCobradas : List<Disciplina>
     - valorTotal : float
 
     + gerarCobranca() : boolean
-    + notificarCobranca() : void
     + calcularValorTotal() : float
+    + consultarCobranca() : void
 }
 
 Usuario <|-- Aluno
@@ -84,6 +117,8 @@ Aluno "3..60" -- "1..*" Disciplina
 Professor "1" -- "0..*" Disciplina 
 Curso "1" *-- "1..*" Disciplina 
 Aluno "1" o-- "0..*" Cobranca 
+Aluno "1" -- "0..*" Matricula
+Disciplina "1" -- "0..*" Matricula
 
 @enduml
 ```

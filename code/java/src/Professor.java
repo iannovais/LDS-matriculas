@@ -24,7 +24,7 @@ public class Professor extends Usuario {
         return null;
     }
 
-    public List<Aluno> getAlunosMatriculadosNaDisciplina(int idDisciplina) {
+    public List<Aluno> alunosMatriculadosNaDisciplina(int idDisciplina) {
         Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
         if (disciplina != null && disciplina.getIdProfessor() == this.getId()) {
             return Matricula.getAlunosMatriculadosNaDisciplina(idDisciplina);
@@ -32,7 +32,7 @@ public class Professor extends Usuario {
         return new ArrayList<>();
     }
 
-    public static void listar() {
+    public static void listarProfessores() {
         System.out.println("Professores disponíveis:");
         try (Scanner scanner = new Scanner(new File(ARQUIVOUSUARIO))) {
             while (scanner.hasNextLine()) {

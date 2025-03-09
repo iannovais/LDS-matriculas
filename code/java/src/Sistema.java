@@ -191,7 +191,7 @@ public class Sistema {
     }
 
     private static void matricularEmDisciplina(Scanner scanner, Aluno aluno) {
-        Disciplina.listar();
+        Disciplina.listarDisciplinas();
         System.out.println("\nDigite o ID da disciplina para se matricular:");
         System.out.print("> ");
         int idDisciplina = scanner.nextInt();
@@ -273,7 +273,7 @@ public class Sistema {
 
         Disciplina disciplina = Disciplina.carregarPorId(idDisciplina);
         if (disciplina != null) {
-            List<Aluno> alunosMatriculados = professor.getAlunosMatriculadosNaDisciplina(idDisciplina);
+            List<Aluno> alunosMatriculados = professor.alunosMatriculadosNaDisciplina(idDisciplina);
             if (alunosMatriculados.isEmpty()) {
                 limparTela();
                 System.out.println("Nenhum aluno matriculado nesta disciplina.\n");
@@ -379,7 +379,7 @@ public class Sistema {
         String respostaObrigatoria = scanner.nextLine().toLowerCase();
         boolean obrigatoriaDisciplina = respostaObrigatoria.equals("sim");
 
-        Curso.listar();
+        Curso.listarCursos();
         int idCursoDisciplina;
         do {
             System.out.println("\nDigite o ID do curso ao qual a disciplina pertence:");
@@ -391,7 +391,7 @@ public class Sistema {
         } while (!Curso.existe(idCursoDisciplina));
         scanner.nextLine();
 
-        Professor.listar();
+        Professor.listarProfessores();
         int idProfessorDisciplina;
         do {
             System.out.println("\nDigite o ID do professor que vai lecionar a disciplina:");
@@ -427,7 +427,7 @@ public class Sistema {
 
     public static void atualizarInformacoesDisciplina(Scanner scanner, Usuario usuarioCarregado) {
         limparTela();
-        Disciplina.listar();
+        Disciplina.listarDisciplinas();
 
         System.out.println("\nDigite o ID da disciplina que deseja atualizar:");
         System.out.print("> ");
@@ -468,7 +468,7 @@ public class Sistema {
     public static void atualizarInformacoesProfessor(Scanner scanner, Usuario usuarioCarregado) {
         limparTela();
         if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
-            Professor.listar();
+            Professor.listarProfessores();
 
             System.out.println("\nDigite o ID do professor que deseja atualizar:");
             System.out.print("> ");
@@ -498,7 +498,7 @@ public class Sistema {
     public static void atualizarInformacoesAluno(Scanner scanner, Usuario usuarioCarregado) {
         limparTela();
         if (usuarioCarregado.getTipoUsuario() == TipoUsuario.SECRETARIA) {
-            Aluno.listar();
+            Aluno.listarAlunos();
 
             System.out.println("\nDigite o ID do aluno que deseja atualizar:");
             System.out.print("> ");
