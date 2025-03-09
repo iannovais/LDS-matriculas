@@ -5,8 +5,11 @@ public class Aluno extends Usuario {
     private static final int MAXOBRIGATORIAS = 4;
     private static final int MAXOPTATIVAS = 2;
 
-    public Aluno(String nome, String login, String senha) {
+    int idCurso;
+
+    public Aluno(String nome, String login, String senha, int idCurso) {
         super(nome, login, senha, TipoUsuario.ALUNO);
+        this.idCurso = idCurso;
     }
 
     public void matricularEmDisciplina(Disciplina disciplina) {
@@ -96,7 +99,8 @@ public class Aluno extends Usuario {
                     String nome = dados[1];
                     String login = dados[2];
                     String senha = dados[3];
-                    return new Aluno(nome, login, senha);
+                    int idCurso = Integer.parseInt(dados[5]);
+                    return new Aluno(nome, login, senha, idCurso);
                 }
             }
         } catch (FileNotFoundException e) {

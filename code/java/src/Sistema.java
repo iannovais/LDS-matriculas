@@ -64,6 +64,7 @@ public class Sistema {
         int tipo;
         TipoUsuario tipoUsuario = null;
 
+        int idCurso = 0;
         do {
             System.out.println("\nSelecione o tipo de usuário:");
             System.out.println("1 - Aluno");
@@ -73,9 +74,22 @@ public class Sistema {
             tipo = scanner.nextInt();
             scanner.nextLine();
 
+
             switch (tipo) {
                 case 1:
                     tipoUsuario = TipoUsuario.ALUNO;
+
+                    Curso.listarCursos();
+                    do {
+                        System.out.println("\nSelecione o curso: ");
+                        System.out.print("> ");
+                        idCurso = scanner.nextInt();
+                        if (!Curso.existe(idCurso)) {
+                            System.out.println(ANSI_RED + "OPS! Curso não encontrado! Escolha um ID válido." + ANSI_RESET);
+                        }
+                    } while (!Curso.existe(idCurso));
+                    scanner.nextLine();
+
                     break;
 
                 case 2:
@@ -92,7 +106,7 @@ public class Sistema {
         } while (tipo < 1 || tipo > 3);
 
         try {
-            Usuario.cadastrar(nome, login, senha, tipoUsuario);
+            Usuario.cadastrar(nome, login, senha, tipoUsuario, idCurso);
             limparTela();
             System.out.println(ANSI_GREEN + "EBA! Usuário cadastrado com sucesso!\n" + ANSI_RESET);
         } catch (IllegalArgumentException e) {

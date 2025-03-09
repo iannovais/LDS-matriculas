@@ -43,32 +43,43 @@ public class Usuario {
             throw new IllegalArgumentException("Login ou senha incorretos.");
     }
 
-    public static Usuario cadastrar(String nome, String login, String senha, TipoUsuario tipoUsuario) {
+    public static Usuario cadastrar(String nome, String login, String senha, TipoUsuario tipoUsuario, int idCurso) {
         if (loginExiste(login))
             throw new IllegalArgumentException("Este login já está em uso. Por favor, escolha outro login.");
 
         Usuario novoUsuario;
         switch (tipoUsuario) {
             case ALUNO:
-                novoUsuario = new Aluno(nome, login, senha);
+                novoUsuario = new Aluno(nome, login, senha, idCurso);
+                novoUsuario.salvarAluno(idCurso);
                 break;
             case PROFESSOR:
                 novoUsuario = new Professor(nome, login, senha);
+                novoUsuario.salvar();
                 break;
             case SECRETARIA:
                 novoUsuario = new Secretaria(nome, login, senha);
+                novoUsuario.salvar();
                 break;
             default:
                 throw new IllegalArgumentException("Tipo de usuário inválido.");
         }
 
-        novoUsuario.salvar();
         return novoUsuario;
     }
 
     private void salvar() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVOUSUARIO, true))) {
-            writer.write(id + ";" + nome + ";" + login + ";" + senha + ";" + tipoUsuario);
+            writer.write(id + ";" + nome + ";" + login + ";" + senha + ";" + tipoUsuario + ";");
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void salvarAluno(int idCurso) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVOUSUARIO, true))) {
+            writer.write(id + ";" + nome + ";" + login + ";" + senha + ";" + tipoUsuario + ";" + idCurso);
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,20 +107,25 @@ public class Usuario {
             while (scanner.hasNextLine()) {
                 String linha = scanner.nextLine();
                 String[] dados = linha.split(";");
-
+    
                 if (dados[2].equals(login)) {
                     int id = Integer.parseInt(dados[0]);
                     String nome = dados[1];
                     String senha = dados[3];
                     TipoUsuario tipoUsuario = TipoUsuario.valueOf(dados[4]);
-
+    
                     switch (tipoUsuario) {
                         case ALUNO:
-                            return new Aluno(nome, login, senha) {
-                                {
-                                    setId(id);
-                                }
-                            };
+                            if (dados.length > 5) {
+                                int idCurso = Integer.parseInt(dados[5]);
+                                return new Aluno(nome, login, senha, idCurso) {
+                                    {
+                                        setId(id);
+                                    }
+                                };
+                            } else {
+                                throw new IllegalArgumentException("Dados do aluno incompletos no arquivo.");
+                            }
                         case PROFESSOR:
                             return new Professor(nome, login, senha) {
                                 {
