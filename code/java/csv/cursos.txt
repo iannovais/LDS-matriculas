@@ -1,1 +1,2 @@
 1;Engenharia de Software;100
+2;Odontologia;100
