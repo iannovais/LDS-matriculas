@@ -24,8 +24,9 @@ class Usuario {
     - tipoUsuario : TipoUsuario
 
     + entrar(login : string, senha : string) : void
-    + cadastrar(nome : string, login : string, senha : string, tipoUsuario : TipoUsuario) : Usuario
+    + cadastrar(nome : string, login : string, senha : string, tipoUsuario : TipoUsuario, idCurso : int) : Usuario
     + salvar() : void
+    + salvarAluno(idCurso : int) : void
     + carregar(login : string) : Usuario
     + loginExiste(login : string) : boolean
     + atualizar(idUsuario : int, novoNome : string, tipoUsuario : TipoUsuario) : void
@@ -34,6 +35,8 @@ class Usuario {
 class Aluno {
     - MAXOBRIGATORIAS : int 
     - MAXOPTATIVAS : int 
+    
+    - idCurso : int;
 
     + matricularEmDisciplina(disciplina : Disciplina) : void
     + cancelarMatricula(disciplina : Disciplina) : void
